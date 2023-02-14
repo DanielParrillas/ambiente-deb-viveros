@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Departamento {
+  id           Int         @id @default(autoincrement())
+  departamento String      @unique(map: "departamento_UNIQUE") @db.VarChar(45)
+  nombre       String      @db.VarChar(45)
+  longitud     Decimal     @db.Decimal(10, 7)
+  latitud      Decimal     @db.Decimal(10, 7)
+  Municipio    Municipio[]
+}
+
+model Municipio {
+  id             Int          @id @default(autoincrement())
+  departamentoId Int
+  municipio      String       @db.VarChar(45)
+  nombre         String       @db.VarChar(45)
+  longitud       Decimal      @db.Decimal(10, 7)
+  latitud        Decimal      @db.Decimal(10, 7)
+  Departamento   Departamento @relation(fields: [departamentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_municipio_departamento")
+  Vivero         Vivero[]
+
+  @@index([departamentoId], map: "FK_municipio_departamento_idx")
+}
+
+model Vivero {
+  id                           Int                            @id @default(autoincrement())
+  municipioId                  Int
+  nombre                       String                         @db.VarChar(100)
+  meta                         Int
+  latitud                      Decimal                        @db.Decimal(10, 7)
+  longitud                     Decimal                        @db.Decimal(10, 7)
+  estaActivo                   Int                            @default(1) @db.TinyInt
+  direccion                    String?                        @db.VarChar(255)
+  enlace                       String?                        @db.VarChar(50)
+  telEnlace                    String?                        @db.VarChar(20)
+  responsable                  String?                        @db.VarChar(50)
+  telResponsable               String?                        @db.VarChar(20)
+  googleMap                    String?                        @db.VarChar(50)
+  Municipio                    Municipio                      @relation(fields: [municipioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroMunicipio")
+  ViveroDisponibilidadEspecies ViveroDisponibilidadEspecies[]
+
+  @@index([municipioId], map: "fkViveroMunicipio_idx")
+}
+
+model ViveroDisponibilidadEspecies {
+  id            Int           @id @default(autoincrement())
+  viveroId      Int
+  especieId     Int
+  disponibles   Int
+  enProceso     Int
+  fecha         DateTime      @db.Date
+  Vivero        Vivero        @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkEspecieVivero")
+  ViveroEspecie ViveroEspecie @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecie")
+
+  @@index([viveroId], map: "fkEspecieVivero_idx")
+  @@index([especieId], map: "fkViveroEspecie_idx")
+}
+
+model ViveroEspecie {
+  id                           Int                            @id @default(autoincrement())
+  tipoId                       Int
+  estadoId                     Int
+  categoriaId                  Int
+  comun                        String                         @db.VarChar(45)
+  cientifico                   String                         @db.VarChar(100)
+  ViveroDisponibilidadEspecies ViveroDisponibilidadEspecies[]
+  ViveroEspecieCategoria       ViveroEspecieCategoria         @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieCategoria")
+  ViveroEspecieEstado          ViveroEspecieEstado            @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieEstado")
+  ViveroEspecieTipo            ViveroEspecieTipo              @relation(fields: [tipoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieTipo")
+
+  @@index([categoriaId], map: "fkViveroEspecieCategoria_idx")
+  @@index([estadoId], map: "fkViveroEspecieEstado_idx")
+  @@index([tipoId], map: "fkViveroEspecieTipo_idx")
+}
+
+model ViveroEspecieCategoria {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(45)
+  ViveroEspecie ViveroEspecie[]
+}
+
+model ViveroEspecieEstado {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(45)
+  ViveroEspecie ViveroEspecie[]
+}
+
+model ViveroEspecieTipo {
+  id            Int             @id @default(autoincrement())
+  nombre        String          @db.VarChar(45)
+  ViveroEspecie ViveroEspecie[]
+}
