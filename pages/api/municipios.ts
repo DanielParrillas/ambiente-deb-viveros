@@ -7,7 +7,7 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const municipios = await await prisma.municipio.findMany({
+  const municipios = await prisma.municipio.findMany({
     select: { id: true, nombre: true, latitud: true, longitud: true },
   });
   res.json(municipios);

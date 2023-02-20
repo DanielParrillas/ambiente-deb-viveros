@@ -1,4 +1,5 @@
 import { Inter } from "@next/font/google";
+import { Alert } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -7,8 +8,10 @@ import Layout from "@/components/Layout";
 
 export default function Home() {
   return (
-    <Layout>
-      <FormularioSolicitud></FormularioSolicitud>
-    </Layout>
+    <div>
+      <Alert severity="success" color="info">
+        This is a success alert — check it out!
+      </Alert>
+    </div>
   );
 }
