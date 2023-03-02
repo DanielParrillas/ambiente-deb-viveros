@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { DispiniblidadPorViveroInterface } from "../../api/viveros/disponibilidades/[id]";
+import { ViveroInterface } from "@/pages/api/viveros/[id]";
 import useSWR, { Fetcher } from "swr";
 import axios from "axios";
 
@@ -10,33 +11,116 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
-import CheckIcon from "@mui/icons-material/Check";
 
-const fetcherVivero: Fetcher<DispiniblidadPorViveroInterface[], string> = (
-  url: string
-) => axios.get(url).then((res) => res.data);
+import {
+  Autocomplete,
+  TextField,
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Fab,
+} from "@mui/material";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useState } from "react";
+
+const fetcherDisponibilidades: Fetcher<
+  DispiniblidadPorViveroInterface[],
+  string
+> = (url: string) => axios.get(url).then((res) => res.data);
+
+const fetcherVivero: Fetcher<ViveroInterface, string> = (url: string) =>
+  axios.get(url).then((res) => res.data);
 
 export default function VistaVivero() {
   const router = useRouter();
-  const {
-    data: disponibilidades,
-    error,
-    isLoading,
-    isValidating,
-  } = useSWR(`/api/viveros/disponibilidades/${router.query.id}`, fetcherVivero);
+  const { data: vivero, error: errorVivero } = useSWR(
+    `/api/viveros/${router.query.id}`,
+    fetcherVivero
+  );
+  const { data: disponibilidades, error: errorDisponibilidades } = useSWR(
+    `/api/viveros/disponibilidades/${router.query.id}`,
+    fetcherDisponibilidades
+  );
+  const [expanded, setExpanded] = useState<string | false>(false);
 
-  if (error) return <div>Failed to load</div>;
-  if (!disponibilidades) return <div>Loading...</div>;
-  console.log(disponibilidades);
+  const handleExpanded =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
+  if (errorDisponibilidades | errorVivero) return <div>Failed to load</div>;
+
+  if (!vivero) {
+    return (
+      <>
+        <h1 className="text-xl">Vivero ...</h1>
+        <h4>Direccion</h4>
+      </>
+    );
+  }
+
+  if (!disponibilidades) {
+    return (
+      <>
+        <h1 className="text-xl">Vivero {vivero.nombre}</h1>
+        <h4>
+          Direccion{" "}
+          {`${vivero.municipio.nombre}, ${vivero.municipio.departamento.nombre}`}
+        </h4>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Común</TableCell>
+                <TableCell>Especie</TableCell>
+                <TableCell>Fecha</TableCell>
+                <TableCell align="right">En proceso</TableCell>
+                <TableCell align="right">Disponibles</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableCell>...</TableCell>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    );
+  }
 
   return (
-    <>
-      <h1 className="text-xl">Vivero {}</h1>
-      <h4>Direccion {}</h4>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+    <div className="h-full flex flex-col">
+      <Accordion
+        expanded={expanded === "panel-vivero"}
+        onChange={handleExpanded("panel-vivero")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel-datos-personales"
+          id="panel-datos-personales"
+        >
+          <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <p>
+            Departamento:
+            {`${vivero.municipio.departamento.nombre}`}
+          </p>
+          <p>Municipio: {`${vivero.municipio.nombre}`}</p>
+          <p>Meta: {`${vivero.meta}`}</p>
+          <p>Direccion: {`${vivero.direccion}`}</p>
+        </AccordionDetails>
+      </Accordion>
+
+      <TableContainer component={Paper} className="h-full">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+          <TableHead className="mt-16">
             <TableRow>
               <TableCell>Común</TableCell>
               <TableCell>Especie</TableCell>
@@ -65,6 +149,6 @@ export default function VistaVivero() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }

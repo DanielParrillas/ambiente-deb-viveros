@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import { ViveroDisponibilidadInterface } from "../api/viveros/disponibilidades";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const fetcher: Fetcher<ViveroDisponibilidadInterface[], string> = (
   url: string
@@ -23,12 +24,21 @@ export default function TablaViveros() {
     isValidating,
   } = useSWR("/api/viveros/disponibilidades", fetcher);
 
+  const [rowSelected, setRowSelected] = useState<string|false>(false)
+
   if (error) return <div>Failed to load</div>;
   if (!viveros) return <div>Loading...</div>;
 
   const handleOnclickRow = (viveroId: number) => {
-    router.push(`viveros/disponibilidades/${viveroId}`);
+    if(rowSelected ===`vivero-row-${viveroId}`){
+      router.push(`viveros/disponibilidades/${viveroId}`);
+    }
+    else {
+      setRowSelected(`vivero-row-${viveroId}`);
+    }
   };
+
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -45,6 +55,7 @@ export default function TablaViveros() {
               key={`vivero-row-${vivero.id}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               onClick={() => handleOnclickRow(vivero.id)}
+              className= {(`vivero-row-${vivero.id}`===rowSelected?" bg-gray-200 cursor-pointer hover:bg-gray-300":"cursor-pointer hover:bg-gray-50")}
             >
               <TableCell>{vivero.nombre}</TableCell>
 

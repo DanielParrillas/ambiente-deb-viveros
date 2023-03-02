@@ -7,6 +7,9 @@ import { useState } from "react";
 import { useSideBarStore } from "@/hooks/sideBarStore";
 import Link from "next/link";
 
+import Typography from "@mui/material/Typography";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+
 export default function Navbar() {
   const [navbarOptions, setNavbarOptions] = useState(false);
   const sideBar = useSideBarStore();
@@ -21,8 +24,20 @@ export default function Navbar() {
           <MenuIcon className="text-slate-600" />
         </Fab>
         <Link href={"/"}>
-          <h1 className="ml-2 text-slate-700 text-xl">Viveros</h1>
+          <h1 className="ml-2 text-slate-700 text-xl mr-4">Viveros</h1>
         </Link>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" href="/">
+            MUI
+          </Link>
+          <Link
+            color="inherit"
+            href="/material-ui/getting-started/installation/"
+          >
+            Core
+          </Link>
+          <Typography color="text.primary">Breadcrumbs</Typography>
+        </Breadcrumbs>
       </div>
       <div>
         <Avatar
