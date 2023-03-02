@@ -15,6 +15,7 @@ const getViveros = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const viveros = await prisma.vivero.findMany({
       select: {
+        id: true,
         nombre: true,
         meta: true,
         estaActivo: true,

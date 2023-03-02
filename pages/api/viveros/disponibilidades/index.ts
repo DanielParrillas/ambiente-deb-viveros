@@ -1,5 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/db/prisma";
+import { Prisma } from "@prisma/client";
+
+//Creamos un variable que almacena la consulta
+const query = Prisma.validator<Prisma.ViveroArgs>()({
+  select: {
+    id: true,
+    nombre: true,
+    disponibilidadesPorEspecie: {
+      select: {
+        disponibles: true,
+        enProceso: true,
+      },
+    },
+  },
+});
+type QueryType = Prisma.ViveroGetPayload<typeof query>;
+export interface ViveroDisponibilidadInterface extends QueryType {}
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,27 +33,7 @@ const getDisponibilidades = async (
   res: NextApiResponse
 ) => {
   try {
-    const disponibilidades = await prisma.vivero.findMany({
-      select: {
-        id: true,
-        nombre: true,
-        disponibilidadesPorEspecie: {
-          select: {
-            id: true,
-            disponibles: true,
-            enProceso: true,
-            fecha: true,
-            especie: {
-              select: {
-                id: true,
-                comun: true,
-                cientifico: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const disponibilidades = await prisma.vivero.findMany(query);
     res.json(disponibilidades);
   } catch (error) {
     console.log(error);

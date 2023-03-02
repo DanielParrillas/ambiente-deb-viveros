@@ -4,7 +4,7 @@ import { Alert } from "@mui/material";
 const inter = Inter({ subsets: ["latin"] });
 
 import FormularioSolicitud from "@/components/FormularioSolicitud";
-import Layout from "@/components/Layout";
+import Layout from "@/components/layout/Layout";
 
 export default function Home() {
   return (
