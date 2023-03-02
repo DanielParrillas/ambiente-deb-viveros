@@ -117,7 +117,21 @@ export default function VistaVivero() {
           <p>Direccion: {`${vivero.direccion}`}</p>
         </AccordionDetails>
       </Accordion>
-
+      <Accordion
+        expanded={expanded === "panel-vivero"}
+        onChange={handleExpanded("panel-vivero")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel-datos-personales"
+          id="panel-datos-personales"
+        >
+          Opciones
+        </AccordionSummary>
+        <AccordionDetails>
+          <p>Mas opciones</p>
+        </AccordionDetails>
+      </Accordion>
       <TableContainer component={Paper} className="h-full">
         <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
           <TableHead className="mt-16">

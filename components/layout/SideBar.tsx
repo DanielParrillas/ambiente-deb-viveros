@@ -16,14 +16,14 @@ function createSideBarItem(name: string, url: string, icon: JSX.Element) {
 }
 const sideBarItems = [
   createSideBarItem("Home", "/", <HomeIcon />),
-  createSideBarItem("Viveros", "/viveros", <WarehouseIcon />),
-  createSideBarItem("Especies", "/especies", <ParkIcon />),
+  createSideBarItem("Viveros", "/disponibilidades/viveros", <WarehouseIcon />),
+  createSideBarItem("Especies", "/disponibilidades  /especies", <ParkIcon />),
 ];
 
 export default function SideBar() {
   const sideBar = useSideBarStore();
   return (
-    <div className=" h-full absolute left-0 top-0 pt-16 w-96  text-slate-700 z-20">
+    <div className=" h-full absolute left-0 top-0 pt-16 w-full sm:w-96  text-slate-700 z-20">
       <List className="bg-white shadow-2xl h-full w-full py-6">
         {sideBarItems.map((item, i) => (
           <Link key={`listLink-${i}`} href={item.url}>
