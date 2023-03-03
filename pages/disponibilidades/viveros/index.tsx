@@ -42,9 +42,16 @@ export default function TablaViveros() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Nombre</TableCell>
-              <TableCell>En Proceso</TableCell>
-              <TableCell align="right">Disponibles</TableCell>
+              <TableCell className="bg-marn-light text-white">Nombre</TableCell>
+              <TableCell className="bg-marn-light text-white">
+                En Proceso
+              </TableCell>
+              <TableCell
+                align="right"
+                className="bg-marn-light text-white rounded-tr-md"
+              >
+                Disponibles
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

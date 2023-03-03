@@ -29,13 +29,17 @@ export default function Navbar() {
       );
     }
     if (router.pathname === "/") {
-      links.push(<Typography color="text.primary">Home</Typography>);
+      links.push(<Typography className="text-slate-400">Home</Typography>);
     } else {
       namesSplit.slice(1, namesSplit.length - 1).forEach((name) => {
         acumuladorLink += "/" + name;
         console.log(acumuladorLink);
         links.push(
-          <Link key={acumuladorLink} href={acumuladorLink}>
+          <Link
+            key={acumuladorLink}
+            href={acumuladorLink}
+            className="text-slate-400"
+          >
             {name}
           </Link>
         );
@@ -45,7 +49,7 @@ export default function Navbar() {
       console.log(router.query);
       if (JSON.stringify(router.query) === "{}") {
         links.push(
-          <Typography color="text.primary">{namesSplit.pop()}</Typography>
+          <Typography className="text-slate-300">{namesSplit.pop()}</Typography>
         );
       }
     }
@@ -53,7 +57,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white w-screen h-16 border-b flex items-center justify-between py-2 px-3 z-30 absolute">
+    <nav className="bg-marn-dark w-screen h-16 flex items-center justify-between py-2 px-3 z-30 absolute">
       <div className="flex items-center">
         <Fab
           size="medium"
@@ -63,7 +67,7 @@ export default function Navbar() {
           <MenuIcon className="text-slate-600" />
         </Fab>
         <Link href={"/"}>
-          <h1 className="ml-2 text-slate-700 text-xl mr-4">Viveros</h1>
+          <h1 className="ml-2 text-white text-xl mr-4 md:mr-8">Viveros</h1>
         </Link>
         <Breadcrumbs aria-label="breadcrumb">{listBreadcrumbs()}</Breadcrumbs>
       </div>

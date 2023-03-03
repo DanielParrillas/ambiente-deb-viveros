@@ -13,13 +13,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import {
-  Autocomplete,
-  TextField,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Box,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -27,7 +20,8 @@ import {
   Fab,
 } from "@mui/material";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddIcon from "@mui/icons-material/Add";
+
 import { useState } from "react";
 
 const fetcherDisponibilidades: Fetcher<
@@ -78,11 +72,21 @@ export default function VistaVivero() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Común</TableCell>
-                <TableCell>Especie</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell align="right">En proceso</TableCell>
-                <TableCell align="right">Disponibles</TableCell>
+                <TableCell className="bg-marn-light text-white">
+                  Común
+                </TableCell>
+                <TableCell className="bg-marn-light text-white">
+                  Especie
+                </TableCell>
+                <TableCell className="bg-marn-light text-white">
+                  Fecha
+                </TableCell>
+                <TableCell align="right" className="bg-marn-light text-white">
+                  En proceso
+                </TableCell>
+                <TableCell align="right" className="bg-marn-light text-white">
+                  Disponibles
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -99,11 +103,22 @@ export default function VistaVivero() {
       <Accordion
         expanded={expanded === "panel-vivero"}
         onChange={handleExpanded("panel-vivero")}
+        className="shadow-none"
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={
+            <Fab
+              color="primary"
+              aria-label="add"
+              size="small"
+              className="order-last shadow-none bg-blue-800"
+            >
+              <AddIcon />
+            </Fab>
+          }
           aria-controls="panel-datos-personales"
           id="panel-datos-personales"
+          className="flex justify-between"
         >
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
         </AccordionSummary>
@@ -117,30 +132,21 @@ export default function VistaVivero() {
           <p>Direccion: {`${vivero.direccion}`}</p>
         </AccordionDetails>
       </Accordion>
-      <Accordion
-        expanded={expanded === "panel-vivero"}
-        onChange={handleExpanded("panel-vivero")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel-datos-personales"
-          id="panel-datos-personales"
-        >
-          Opciones
-        </AccordionSummary>
-        <AccordionDetails>
-          <p>Mas opciones</p>
-        </AccordionDetails>
-      </Accordion>
       <TableContainer component={Paper} className="h-full">
         <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
           <TableHead className="mt-16">
             <TableRow>
-              <TableCell>Común</TableCell>
-              <TableCell>Especie</TableCell>
-              <TableCell>Fecha</TableCell>
-              <TableCell align="right">En proceso</TableCell>
-              <TableCell align="right">Disponibles</TableCell>
+              <TableCell className="bg-marn-light text-white">Común</TableCell>
+              <TableCell className="bg-marn-light text-white">
+                Especie
+              </TableCell>
+              <TableCell className="bg-marn-light text-white">Fecha</TableCell>
+              <TableCell align="right" className="bg-marn-light text-white">
+                En proceso
+              </TableCell>
+              <TableCell align="right" className="bg-marn-light text-white">
+                Disponibles
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

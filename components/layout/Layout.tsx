@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
         <SideBar />
       </Slide> */}
 
-      <main className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0">
+      <main className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-gray-100">
         <div className="w-full h-full overflow-y-auto p-4">{children}</div>
       </main>
     </>
