@@ -1,5 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/db/prisma";
+import { Prisma } from "@prisma/client";
+
+const defaultQuery = Prisma.validator<Prisma.ViveroEspecieArgs>()({
+  select: {
+    id: true,
+    comun: true,
+    cientifico: true,
+    categoria: true,
+    estado: true,
+    tipo: true,
+  },
+});
+export interface EspecieInterfaceDefault
+  extends Prisma.ViveroEspecieGetPayload<typeof defaultQuery> {}
+
+const simpleQuery = Prisma.validator<Prisma.ViveroEspecieArgs>()({
+  select: {
+    id: true,
+    comun: true,
+    cientifico: true,
+  },
+});
+export interface EspecieInterfaceSimple
+  extends Prisma.ViveroEspecieGetPayload<typeof simpleQuery> {}
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,22 +31,21 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "GET":
-      return await getEspecies(req, res);
+      if (req.query.tipo === "simple") {
+        return await getEspecies(req, res, simpleQuery);
+      } else {
+        return await getEspecies(req, res, defaultQuery);
+      }
   }
 }
 
-const getEspecies = async (req: NextApiRequest, res: NextApiResponse) => {
+const getEspecies = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  query: typeof defaultQuery | typeof simpleQuery
+) => {
   try {
-    const especies = await prisma.viveroEspecie.findMany({
-      select: {
-        id: true,
-        comun: true,
-        cientifico: true,
-        categoria: true,
-        estado: true,
-        tipo: true,
-      },
-    });
+    const especies = await prisma.viveroEspecie.findMany(query);
     res.json(especies);
   } catch (error) {
     console.log(error);

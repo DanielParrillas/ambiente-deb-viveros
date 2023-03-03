@@ -14,9 +14,16 @@ export default function Disponibilidades() {
 
   return (
     <div className="h-full flex flex-col md:flex-row md:p-16 gap-8 md:gap-16 p-4">
-      {links.map((link) => (
-        <div className="shadow-md grid content-center p-4 md:basis-1/2 rounded-md bg-white hover:shadow-lg">
-          <Link href={link.ulr} className="w-full h-full">
+      {links.map((link, i) => (
+        <div
+          key={`div-disp-${i}`}
+          className="shadow-md grid content-center p-4 md:basis-1/2 rounded-md bg-white hover:shadow-lg"
+        >
+          <Link
+            key={`link-dips-${i}`}
+            href={link.ulr}
+            className="w-full h-full"
+          >
             <p className="text-center text-2xl">{link.label}</p>
           </Link>
         </div>

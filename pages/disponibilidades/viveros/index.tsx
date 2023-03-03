@@ -17,12 +17,10 @@ const fetcher: Fetcher<ViveroDisponibilidadInterface[], string> = (
 ) => axios.get(url).then((res) => res.data);
 export default function TablaViveros() {
   const router = useRouter();
-  const {
-    data: viveros,
-    error,
-    isLoading,
-    isValidating,
-  } = useSWR("/api/viveros/disponibilidades", fetcher);
+  const { data: viveros, error } = useSWR(
+    "/api/viveros/disponibilidades",
+    fetcher
+  );
   const [rowSelected, setRowSelected] = useState<string | false>(false);
 
   if (error) return <div>Failed to load</div>;

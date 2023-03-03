@@ -48,9 +48,10 @@ const getDisponibilidadesPorVivero = async (
       }
     );
 
-    res.json(disponibilidades);
+    return res.json(disponibilidades);
   } catch (error) {
     console.log(error);
+    console.log("error en la api de disponibilidad por vivero");
     return res
       .status(500)
       .json({ message: "error en la api de disponibilidad por vivero" });

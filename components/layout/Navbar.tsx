@@ -23,20 +23,27 @@ export default function Navbar() {
     console.log(router.pathname);
     if (router.pathname === "/404") {
       links.push(
-        <Link key={"home/"} href={"/"}>
+        <Link key={"404toHome"} href={"/"}>
           Home
         </Link>
       );
+      return links;
     }
     if (router.pathname === "/") {
-      links.push(<Typography className="text-slate-400">Home</Typography>);
+      console.log("is home");
+      links.push(
+        <Typography key="typography-home-not-url" className="text-slate-400">
+          Home
+        </Typography>
+      );
+      return links;
     } else {
-      namesSplit.slice(1, namesSplit.length - 1).forEach((name) => {
+      namesSplit.slice(1, namesSplit.length - 1).forEach((name, i) => {
         acumuladorLink += "/" + name;
         console.log(acumuladorLink);
         links.push(
           <Link
-            key={acumuladorLink}
+            key={acumuladorLink + i}
             href={acumuladorLink}
             className="text-slate-400"
           >
@@ -49,7 +56,9 @@ export default function Navbar() {
       console.log(router.query);
       if (JSON.stringify(router.query) === "{}") {
         links.push(
-          <Typography className="text-slate-300">{namesSplit.pop()}</Typography>
+          <Typography key={"lastlink"} className="text-slate-300">
+            {namesSplit.pop()}
+          </Typography>
         );
       }
     }

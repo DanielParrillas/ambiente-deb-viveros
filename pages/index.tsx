@@ -1,10 +1,6 @@
-import { Inter } from "@next/font/google";
 import { Alert } from "@mui/material";
-
-const inter = Inter({ subsets: ["latin"] });
-
-import FormularioSolicitud from "@/components/FormularioSolicitud";
-import Layout from "@/components/layout/Layout";
+import Example from "@/components/chart/firtChart";
+import EspecieAutoComplete from "@/components/form/components/EspecieAutoComplete";
 
 export default function Home() {
   return (
@@ -12,6 +8,7 @@ export default function Home() {
       <Alert severity="success" color="info">
         This is a success alert — check it out!
       </Alert>
+      <EspecieAutoComplete />
     </div>
   );
 }

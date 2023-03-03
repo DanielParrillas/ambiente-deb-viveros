@@ -4,6 +4,8 @@ import { ViveroInterface } from "@/pages/api/viveros/[id]";
 import useSWR, { Fetcher } from "swr";
 import axios from "axios";
 
+import DisponibilidadForm from "@/components/form/DisponibilidadForm";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -123,13 +125,7 @@ export default function VistaVivero() {
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <p>
-            Departamento:
-            {`${vivero.municipio.departamento.nombre}`}
-          </p>
-          <p>Municipio: {`${vivero.municipio.nombre}`}</p>
-          <p>Meta: {`${vivero.meta}`}</p>
-          <p>Direccion: {`${vivero.direccion}`}</p>
+          <DisponibilidadForm />
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Paper} className="h-full">
