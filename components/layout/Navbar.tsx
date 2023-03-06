@@ -23,7 +23,7 @@ export default function Navbar() {
     console.log(router.pathname);
     if (router.pathname === "/404") {
       links.push(
-        <Link key={"404toHome"} href={"/"}>
+        <Link key={"404toHome"} href={"/"} className="text-slate-400">
           Home
         </Link>
       );
@@ -70,10 +70,10 @@ export default function Navbar() {
       <div className="flex items-center">
         <Fab
           size="medium"
-          className="shadow-none"
+          className="shadow-none text-white hover:bg-marn-dark hover:text-marn-dark active:text-marn-dark"
           onClick={() => sideBar.cambiarVisivilidad()}
         >
-          <MenuIcon className="text-slate-600" />
+          <MenuIcon className="text-white" />
         </Fab>
         <Link href={"/"}>
           <h1 className="ml-2 text-white text-xl mr-4 md:mr-8">Viveros</h1>

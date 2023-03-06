@@ -7,24 +7,92 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { ViveroDisponibilidadInterface } from "../../api/viveros/disponibilidades";
+import { DisponibilidadPorViveroInterface } from "../../api/disponibilidades";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const fetcher: Fetcher<ViveroDisponibilidadInterface[], string> = (
+const fetcher: Fetcher<DisponibilidadPorViveroInterface[], string> = (
   url: string
-) => axios.get(url).then((res) => res.data);
+) =>
+  axios
+    .get(url, {
+      params: {
+        por: "vivero",
+      },
+    })
+    .then((res) => res.data);
 export default function TablaViveros() {
   const router = useRouter();
-  const { data: viveros, error } = useSWR(
-    "/api/viveros/disponibilidades",
-    fetcher
-  );
+  const { data: viveros, error } = useSWR("/api/disponibilidades", fetcher);
   const [rowSelected, setRowSelected] = useState<string | false>(false);
 
-  if (error) return <div>Failed to load</div>;
-  if (!viveros) return <div>Loading...</div>;
+  if (error)
+    return (
+      <div className="h-full flex flex-col">
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className="bg-marn-light text-white">
+                  Nombre
+                </TableCell>
+                <TableCell className="bg-marn-light text-white">
+                  En Proceso
+                </TableCell>
+                <TableCell
+                  align="right"
+                  className="bg-marn-light text-white rounded-tr-md"
+                >
+                  Disponibles
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell className="text-red-900">
+                  no se pudo recuperar ningun vivero
+                </TableCell>
+                <TableCell align="right"></TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
+  if (!viveros)
+    return (
+      <div className="h-full flex flex-col">
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className="bg-marn-light text-white">
+                  Nombre
+                </TableCell>
+                <TableCell className="bg-marn-light text-white">
+                  En Proceso
+                </TableCell>
+                <TableCell
+                  align="right"
+                  className="bg-marn-light text-white rounded-tr-md"
+                >
+                  Disponibles
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>cargando...</TableCell>
+                <TableCell>cargando...</TableCell>
+                <TableCell align="right">cargando...</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
 
   const handleOnclickRow = (viveroId: number) => {
     if (rowSelected === `vivero-row-${viveroId}`) {

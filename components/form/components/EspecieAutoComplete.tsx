@@ -5,6 +5,10 @@ import { EspecieInterfaceSimple } from "@/pages/api/especies";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+interface EspecieAutoCompleteProps {
+  className?: string;
+}
+
 const fetcher: Fetcher<EspecieInterfaceSimple[], string> = (url: string) =>
   axios
     .get(url, {
@@ -14,7 +18,7 @@ const fetcher: Fetcher<EspecieInterfaceSimple[], string> = (url: string) =>
     })
     .then((res) => res.data);
 
-export default function EspecieAutoComplete() {
+export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
   const { data: especies, error: especiesError } = useSWR(
     "/api/especies",
     fetcher
@@ -24,8 +28,11 @@ export default function EspecieAutoComplete() {
       <Autocomplete
         disablePortal
         id="combo-box-demo"
-        options={[{ label: "error", id: "errorEspecies" }]}
-        renderInput={(params) => <TextField {...params} label="Especie..." />}
+        options={[]}
+        renderInput={(params) => (
+          <TextField {...params} label="Especie..." error />
+        )}
+        {...props}
       />
     );
   if (!especies)
@@ -35,6 +42,7 @@ export default function EspecieAutoComplete() {
         id="combo-box-demo"
         options={[{ label: "cargando...", id: "cargandoEspecies" }]}
         renderInput={(params) => <TextField {...params} label="Especie..." />}
+        {...props}
       />
     );
   return (
@@ -43,9 +51,10 @@ export default function EspecieAutoComplete() {
       id="combo-box-demo"
       options={especies.map((item) => ({
         label: `${item.cientifico} - ${item.comun}`,
-        id: `especieOption${item.id}`,
+        id: `especieOption-${item.id}`,
       }))}
       renderInput={(params) => <TextField {...params} label="Especie" />}
+      {...props}
     />
   );
 }

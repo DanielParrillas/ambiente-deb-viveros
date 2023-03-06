@@ -16,8 +16,7 @@ function createSideBarItem(name: string, url: string, icon: JSX.Element) {
 }
 const sideBarItems = [
   createSideBarItem("Home", "/", <HomeIcon />),
-  createSideBarItem("Viveros", "/disponibilidades/viveros", <WarehouseIcon />),
-  createSideBarItem("Especies", "/disponibilidades  /especies", <ParkIcon />),
+  createSideBarItem("Disponibilidades", "/disponibilidades", <WarehouseIcon />),
 ];
 
 export default function SideBar() {

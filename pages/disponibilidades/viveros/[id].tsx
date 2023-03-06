@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { DispiniblidadPorViveroInterface } from "../../api/viveros/disponibilidades/[id]";
+import { DispiniblidadPorViveroInterface } from "../../api/disponibilidades/[id]";
 import { ViveroInterface } from "@/pages/api/viveros/[id]";
 import useSWR, { Fetcher } from "swr";
 import axios from "axios";
@@ -20,6 +20,7 @@ import {
   AccordionDetails,
   Typography,
   Fab,
+  Button,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -41,7 +42,7 @@ export default function VistaVivero() {
     fetcherVivero
   );
   const { data: disponibilidades, error: errorDisponibilidades } = useSWR(
-    `/api/viveros/disponibilidades/${router.query.id}`,
+    `/api/disponibilidades/${router.query.id}`,
     fetcherDisponibilidades
   );
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -53,23 +54,35 @@ export default function VistaVivero() {
 
   if (errorDisponibilidades | errorVivero) return <div>Failed to load</div>;
 
-  if (!vivero) {
+  if (!disponibilidades || !vivero) {
     return (
-      <>
-        <h1 className="text-xl">Vivero ...</h1>
-        <h4>Direccion</h4>
-      </>
-    );
-  }
-
-  if (!disponibilidades) {
-    return (
-      <>
-        <h1 className="text-xl">Vivero {vivero.nombre}</h1>
-        <h4>
-          Direccion{" "}
-          {`${vivero.municipio.nombre}, ${vivero.municipio.departamento.nombre}`}
-        </h4>
+      <div className="h-full flex flex-col">
+        <Accordion
+          expanded={expanded === "panel-vivero"}
+          onChange={handleExpanded("panel-vivero")}
+          className="shadow-none"
+        >
+          <AccordionSummary
+            expandIcon={
+              <Fab
+                color="primary"
+                aria-label="add"
+                size="small"
+                className="order-last shadow-none bg-blue-800"
+              >
+                <AddIcon />
+              </Fab>
+            }
+            aria-controls="panel-datos-personales"
+            id="panel-datos-personales"
+            className="flex justify-between"
+          >
+            Vivero ...
+          </AccordionSummary>
+          <AccordionDetails>
+            <DisponibilidadForm />
+          </AccordionDetails>
+        </Accordion>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -92,18 +105,23 @@ export default function VistaVivero() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableCell>...</TableCell>
+              <TableRow>
+                <TableCell>cargando...</TableCell>
+                <TableCell>cargando...</TableCell>
+                <TableCell>cargando...</TableCell>
+                <TableCell>cargando...</TableCell>
+                <TableCell>cargando...</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
-      </>
+      </div>
     );
   }
-
   return (
     <div className="h-full flex flex-col">
       <Accordion
-        expanded={expanded === "panel-vivero"}
+        expanded={expanded === "panel-vivero" || disponibilidades.length === 0}
         onChange={handleExpanded("panel-vivero")}
         className="shadow-none"
       >
