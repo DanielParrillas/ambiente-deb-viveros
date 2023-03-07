@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 interface EspecieAutoCompleteProps {
   className?: string;
+  required?: boolean;
 }
 
 const fetcher: Fetcher<EspecieInterfaceSimple[], string> = (url: string) =>
@@ -53,7 +54,9 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
         label: `${item.cientifico} - ${item.comun}`,
         id: `especieOption-${item.id}`,
       }))}
-      renderInput={(params) => <TextField {...params} label="Especie" />}
+      renderInput={(params) => (
+        <TextField {...params} label="Especie" required={props.required} />
+      )}
       {...props}
     />
   );

@@ -38,9 +38,7 @@ export default async function handler(
 }
 
 const deleteDisponibilidad = (req: NextApiRequest, res: NextApiResponse) => {};
-const updateDisponibilidad = (req: NextApiRequest, res: NextApiResponse) => {
-  const disponibilidad = await prisma.viveroDis ponibilidadEspecies.update();
-};
+const updateDisponibilidad = (req: NextApiRequest, res: NextApiResponse) => {};
 
 const getDisponibilidad = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

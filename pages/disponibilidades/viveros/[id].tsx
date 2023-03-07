@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { useState } from "react";
 
@@ -46,11 +47,48 @@ export default function VistaVivero() {
     fetcherDisponibilidades
   );
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [rowSelected, setRowSelected] = useState<number | false>(false);
+  const [modo, setModo] = useState<"nuevo" | "edicion">("nuevo");
 
   const handleExpanded =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
+      if (!isExpanded) {
+        setModo("nuevo");
+      }
     };
+
+  const handleOnclickRow = (
+    disponibilidadId: DispiniblidadPorViveroInterface
+  ) => {
+    if (expanded === false) {
+      if (rowSelected === false) {
+        setRowSelected(disponibilidadId.id);
+        setModo("nuevo");
+      } else if (rowSelected === disponibilidadId.id) {
+        setExpanded("panel-vivero");
+        setModo("edicion");
+      } else {
+        setRowSelected(disponibilidadId.id);
+        setModo("nuevo");
+      }
+    } else {
+      if (rowSelected === disponibilidadId.id) {
+        setRowSelected(false);
+        setExpanded(false);
+        setModo("nuevo");
+      } else {
+        setExpanded(false);
+        setRowSelected(disponibilidadId.id);
+        setModo("nuevo");
+      }
+    }
+  };
+
+  const handleClickAdd = () => {
+    setRowSelected(false);
+    setExpanded("panel-vivero");
+  };
 
   if (errorDisponibilidades | errorVivero) return <div>Failed to load</div>;
 
@@ -80,7 +118,7 @@ export default function VistaVivero() {
             Vivero ...
           </AccordionSummary>
           <AccordionDetails>
-            <DisponibilidadForm />
+            <DisponibilidadForm modo={modo} />
           </AccordionDetails>
         </Accordion>
         <TableContainer component={Paper}>
@@ -131,9 +169,14 @@ export default function VistaVivero() {
               color="primary"
               aria-label="add"
               size="small"
-              className="order-last shadow-none bg-blue-800"
+              className={`order-last shadow-none ${
+                modo === "nuevo"
+                  ? "bg-green-700 hover:bg-green-700"
+                  : "bg-yellow-600 hover:bg-yellow-600"
+              }`}
+              onClick={() => handleClickAdd()}
             >
-              <AddIcon />
+              {modo === "nuevo" ? <AddIcon /> : <EditIcon />}
             </Fab>
           }
           aria-controls="panel-datos-personales"
@@ -143,11 +186,16 @@ export default function VistaVivero() {
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <DisponibilidadForm />
+          <DisponibilidadForm modo={modo} />
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Paper} className="h-full">
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+        <Table
+          sx={{ minWidth: 650 }}
+          aria-label="simple table"
+          stickyHeader
+          className="select-none"
+        >
           <TableHead className="mt-16">
             <TableRow>
               <TableCell className="bg-marn-light text-white">Común</TableCell>
@@ -168,6 +216,12 @@ export default function VistaVivero() {
               <TableRow
                 key={`disponiblidad-v-row-${disponibilidad.id}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                onClick={() => handleOnclickRow(disponibilidad)}
+                className={
+                  disponibilidad.id === rowSelected
+                    ? "transition ease-in duration-100 bg-gray-200 cursor-pointer hover:bg-gray-300"
+                    : "transition ease-in duration-75 cursor-pointer hover:bg-gray-50"
+                }
               >
                 <TableCell>{disponibilidad.especie.comun}</TableCell>
                 <TableCell>{disponibilidad.especie.cientifico}</TableCell>

@@ -1,7 +1,7 @@
 import { Alert } from "@mui/material";
-import Example from "@/components/chart/firtChart";
 import EspecieAutoComplete from "@/components/form/components/EspecieAutoComplete";
+import Example from "@/components/chart/firtChart";
 
 export default function Home() {
-  return <div></div>;
+  return <Example />;
 }

@@ -23,7 +23,7 @@ export default function SideBar() {
   const sideBar = useSideBarStore();
   return (
     <div className=" h-full absolute left-0 top-0 pt-16 w-full sm:w-72  text-slate-700 z-20">
-      <List className="bg-marn-darklight shadow-2xl h-full w-full py-6">
+      <List className="bg-marn-darklight shadow-2xl shadow-black h-full w-full py-6">
         {sideBarItems.map((item, i) => (
           <Link key={`listLink-${i}`} href={item.url}>
             <ListItem

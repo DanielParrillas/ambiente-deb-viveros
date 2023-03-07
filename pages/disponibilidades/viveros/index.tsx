@@ -105,7 +105,12 @@ export default function TablaViveros() {
   return (
     <div className="h-full flex flex-col">
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+        <Table
+          sx={{ minWidth: 650 }}
+          aria-label="simple table"
+          stickyHeader
+          className="select-none"
+        >
           <TableHead>
             <TableRow>
               <TableCell className="bg-marn-light text-white">Nombre</TableCell>
@@ -128,8 +133,8 @@ export default function TablaViveros() {
                 onClick={() => handleOnclickRow(vivero.id)}
                 className={
                   `vivero-row-${vivero.id}` === rowSelected
-                    ? " bg-gray-200 cursor-pointer hover:bg-gray-300"
-                    : "cursor-pointer hover:bg-gray-50"
+                    ? "transition ease-in duration-100 bg-gray-200 cursor-pointer hover:bg-gray-300"
+                    : "transition ease-in duration-75 cursor-pointer hover:bg-gray-50"
                 }
               >
                 <TableCell>{vivero.nombre}</TableCell>

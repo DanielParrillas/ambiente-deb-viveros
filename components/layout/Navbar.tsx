@@ -23,7 +23,11 @@ export default function Navbar() {
     console.log(router.pathname);
     if (router.pathname === "/404") {
       links.push(
-        <Link key={"404toHome"} href={"/"} className="text-slate-400">
+        <Link
+          key={"404toHome"}
+          href={"/"}
+          className="text-slate-400 transition ease-in-out hover:-translate-y-1 hover:text-slate-300 duration-200"
+        >
           Home
         </Link>
       );
@@ -45,7 +49,7 @@ export default function Navbar() {
           <Link
             key={acumuladorLink + i}
             href={acumuladorLink}
-            className="text-slate-400"
+            className="text-slate-400 transition ease-in-out hover:-translate-y-1 hover:text-slate-300 duration-300"
           >
             {name}
           </Link>
@@ -66,7 +70,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-marn-dark w-screen h-16 flex items-center justify-between py-2 px-3 z-30 absolute">
+    <nav className="bg-marn-dark w-screen h-16 flex items-center justify-between py-2 px-3 z-30 absolute shadow-lg">
       <div className="flex items-center">
         <Fab
           size="medium"
