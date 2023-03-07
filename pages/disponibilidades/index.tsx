@@ -7,7 +7,7 @@ const createDisponiblidadLink = (url: string, label: string) => {
 
 export default function Disponibilidades() {
   const router = useRouter();
-  const links = [
+  let links = [
     createDisponiblidadLink(`${router.pathname}/viveros`, "Por viveros"),
     createDisponiblidadLink(`${router.pathname}/especies`, "Por especies"),
   ];
@@ -20,9 +20,9 @@ export default function Disponibilidades() {
           href={link.ulr}
           className="transition ease-in-out duration-200 shadow-md grid content-center p-4 md:basis-1/2 rounded-md bg-white hover:shadow-lg"
         >
-          <p key={`div-disp-${i}`} className="w-full h-full">
+          <div key={`div-disp-${i}`} className="w-full h-full">
             <p className="text-center text-2xl">{link.label}</p>
-          </p>
+          </div>
         </Link>
       ))}
     </div>
