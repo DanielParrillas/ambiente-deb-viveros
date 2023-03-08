@@ -1,14 +1,7 @@
 import EspecieAutoComplete from "./components/EspecieAutoComplete";
-import axios from "axios";
-
 import { TextField, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Prisma } from "@prisma/client";
-import { EspecieInterfaceSimple } from "@/pages/api/especies";
-
-import { esES, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface Disponibilidad
   extends Prisma.ViveroDisponibilidadEspeciesUpdateInput {
@@ -20,13 +13,13 @@ interface DisponibilidadFormProps {
 }
 
 export default function DisponibilidadForm(props: DisponibilidadFormProps) {
-  const [disponibilidad, setDisponibilidad] = useState<Disponibilidad>();
+  // const [disponibilidad, setDisponibilidad] = useState<Disponibilidad>();
 
-  useEffect(() => {
-    if (props.disponibilidad) {
-      setDisponibilidad(props.disponibilidad);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (props.disponibilidad) {
+  //     setDisponibilidad(props.disponibilidad);
+  //   }
+  // }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

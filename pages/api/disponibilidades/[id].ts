@@ -33,19 +33,20 @@ export default async function handler(
     case "DELETE":
       return await deleteDisponibilidad(req, res);
     case "PUT":
-      return await updateDisponibilidad(req, res);
+      return;
+    //return await updateDisponibilidad(req, res);
   }
 }
 
 const deleteDisponibilidad = (req: NextApiRequest, res: NextApiResponse) => {};
-const updateDisponibilidad = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
-  const disponibilidad = await prisma.viveroDisponibilidadEspecies.updateMany(
-    {}
-  );
-};
+// const updateDisponibilidad = async (
+//   req: NextApiRequest,
+//   res: NextApiResponse
+// ) => {
+//   const disponibilidad = await prisma.viveroDisponibilidadEspecies.updateMany(
+//     {}
+//   );
+// };
 
 const getDisponibilidad = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
