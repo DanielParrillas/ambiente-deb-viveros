@@ -163,14 +163,9 @@ export default function VistaVivero() {
         <AccordionSummary
           expandIcon={
             <Fab
-              color="primary"
+              color={`${modo === "nuevo" ? "success" : "warning"}`}
               aria-label="add"
               size="small"
-              className={`order-last shadow-none ${
-                modo === "nuevo"
-                  ? "bg-green-700 hover:bg-green-700"
-                  : "bg-yellow-600 hover:bg-yellow-600"
-              }`}
               onClick={() => handleClickAdd()}
             >
               {modo === "nuevo" ? <AddIcon /> : <EditIcon />}

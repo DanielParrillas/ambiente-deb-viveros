@@ -4,6 +4,7 @@ specifiers:
   '@babel/core': '>=7.0.0 <8.0.0'
   '@emotion/react': ^11.10.5
   '@emotion/styled': ^11.10.5
+  '@fontsource/roboto': ^4.5.8
   '@mui/icons-material': ^5.11.0
   '@mui/material': ^5.11.8
   '@mui/utils': ^5.11.11
@@ -34,6 +35,7 @@ dependencies:
   '@babel/core': 7.20.12
   '@emotion/react': 11.10.5_yxdp3dl3eazy3vwpbmv4fq727a
   '@emotion/styled': 11.10.5_4erqsq3n444jecyuvaxwc5b3vi
+  '@fontsource/roboto': 4.5.8
   '@mui/icons-material': 5.11.0_3psqo62dtzuc5tpd3awdluze4i
   '@mui/material': 5.11.8_rqh7qj4464ntrqrt6banhaqg4q
   '@mui/utils': 5.11.11_react@18.2.0
@@ -438,6 +440,10 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@fontsource/roboto/4.5.8:
+    resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:

@@ -65,17 +65,11 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
         />
       </div>
       <div className="flex mt-5 items-center md:basis-full justify-around md:justify-end md:pr-2 md:gap-8">
-        <Button
-          variant="contained"
-          className="transition ease-out duration-200 normal-case bg-blue-700 hover:bg-blue-600 "
-        >
+        <Button variant="contained" color="primary">
           Guardar
         </Button>
         {props.modo === "edicion" ? (
-          <Button
-            variant="contained"
-            className="transition ease-out duration-200 normal-case bg-red-700 hover:bg-red-600 "
-          >
+          <Button variant="contained" color="error">
             Eliminar
           </Button>
         ) : (

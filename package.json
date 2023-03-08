@@ -12,6 +12,7 @@
     "@babel/core": ">=7.0.0 <8.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "@mui/utils": "^5.11.11",
