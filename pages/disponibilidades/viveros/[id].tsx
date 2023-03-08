@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
+import useSWR, { Fetcher } from "swr";
 import { DispiniblidadPorViveroInterface } from "../../api/disponibilidades/[id]";
 import { ViveroInterface } from "@/pages/api/viveros/[id]";
-import useSWR, { Fetcher } from "swr";
 import axios from "axios";
-
-import DisponibilidadForm from "@/components/form/DisponibilidadForm";
-
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/es-mx";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,20 +14,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
   Fab,
-  Button,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-
-import { useState } from "react";
+import DisponibilidadForm from "@/components/form/DisponibilidadForm";
 
 const fetcherDisponibilidades: Fetcher<
   DispiniblidadPorViveroInterface[],
@@ -226,7 +223,7 @@ export default function VistaVivero() {
                 <TableCell>{disponibilidad.especie.comun}</TableCell>
                 <TableCell>{disponibilidad.especie.cientifico}</TableCell>
                 <TableCell align="right">
-                  {String(disponibilidad.fecha)}
+                  {dayjs().calendar(dayjs(disponibilidad.fecha))}
                 </TableCell>
                 <TableCell align="right">{disponibilidad.enProceso}</TableCell>
                 <TableCell align="right">
