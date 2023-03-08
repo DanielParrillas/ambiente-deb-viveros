@@ -100,10 +100,10 @@ export default function VistaVivero() {
           <AccordionSummary
             expandIcon={
               <Fab
-                color="primary"
+                color="success"
                 aria-label="add"
                 size="small"
-                className="order-last shadow-none bg-blue-800"
+                className="order-last"
               >
                 <AddIcon />
               </Fab>

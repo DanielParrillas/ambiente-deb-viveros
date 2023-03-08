@@ -74,7 +74,7 @@ export default function Navbar() {
       <div className="flex items-center">
         <Fab
           size="medium"
-          className="shadow-none text-white hover:bg-marn-dark hover:text-marn-dark active:text-marn-dark"
+          className="shadow-none text-white bg-marn-dark hover:bg-marn-dark hover:text-marn-dark active:text-marn-dark"
           onClick={() => sideBar.cambiarVisivilidad()}
         >
           <MenuIcon className="text-white" />
