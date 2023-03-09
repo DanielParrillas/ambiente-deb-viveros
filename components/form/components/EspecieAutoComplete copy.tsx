@@ -32,8 +32,28 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
     "/api/especies",
     fetcher
   );
-  if (especiesError) return <div></div>;
-  if (!especies) return <div>sdf</div>;
+  if (especiesError)
+    return (
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={[]}
+        renderInput={(params) => (
+          <TextField {...params} label="Especie..." error />
+        )}
+        {...props}
+      />
+    );
+  if (!especies)
+    return (
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={[{ label: "cargando...", id: "cargandoEspecies" }]}
+        renderInput={(params) => <TextField {...params} label="Especie..." />}
+        {...props}
+      />
+    );
   return (
     <Autocomplete
       id="combo-box-demo"
@@ -42,19 +62,15 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
         id: `especieOption-${item.id}`,
         especie: item,
       }))}
-      value={
-        typeof disponibilidad.especie === "string"
-          ? null
-          : {
-              label: `${disponibilidad.especie.cientifico} - ${disponibilidad.especie.comun}`,
-              id: `especieOption-${disponibilidad.especie.id}`,
-              especie: disponibilidad.especie,
-            }
-      }
+      value={{
+        label: `${especies[0].cientifico} - ${especies[0].comun}`,
+        id: `especieOption-${especies[0].id}`,
+        especie: especies[0],
+      }}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      // getOptionLabel={(option) =>
-      //   `${option.especie.cientifico} - ${option.especie.comun}`
-      // }
+      getOptionLabel={(option) =>
+        `${option.especie.cientifico} - ${option.especie.comun}`
+      }
       onChange={(event: React.SyntheticEvent, value: any) => {
         console.log(value);
         setDisponibilidad({

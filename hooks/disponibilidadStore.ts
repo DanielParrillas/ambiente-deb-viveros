@@ -3,32 +3,38 @@ import {
   NewDisponibilidad,
   UpdatedDisponibilidad,
 } from "@/prisma/queries/disponibilidadesQueries";
+import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
 
-const initialState = {
+export const initialState = {
   id: "",
   fecha: "",
   disponibles: "",
   enProceso: "",
-  especies: "",
+  especie: "",
   vivero: "",
 };
 
+export interface DisponibilidadStore {
+  id: string | number;
+  fecha: string | Date | string;
+  disponibles: string | number;
+  enProceso: string | number;
+  especie: EspecieSimpleInterface | string;
+  vivero: string | number;
+}
+
 interface DisponibilidadState {
-  disponibilidad:
-    | typeof initialState
-    | NewDisponibilidad
-    | UpdatedDisponibilidad;
+  disponibilidad: DisponibilidadStore;
   limpiarDatos: () => void;
-  setDisponibilidad: (data: NewDisponibilidad | UpdatedDisponibilidad) => void;
-  guardarDisponibilidad: (
-    data: NewDisponibilidad | UpdatedDisponibilidad
-  ) => void;
+  setDisponibilidad: (data: DisponibilidadStore) => void;
+  guardarDisponibilidad: (data: DisponibilidadStore) => void;
 }
 
 export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
   disponibilidad: initialState,
   limpiarDatos: () => set((state) => ({ disponibilidad: initialState })),
-  setDisponibilidad: (data) => set((state) => ({ disponibilidad: data })),
+  setDisponibilidad: (data) =>
+    set((state) => ({ disponibilidad: { ...data } })),
   guardarDisponibilidad: (data: any) =>
     set((state) => ({ disponibilidad: data })),
 }));

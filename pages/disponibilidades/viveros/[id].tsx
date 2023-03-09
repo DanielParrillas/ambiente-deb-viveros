@@ -23,6 +23,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DisponibilidadForm from "@/components/form/DisponibilidadForm";
+import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 
 const fetcherDisponibilidades: Fetcher<
   DispiniblidadesDeUnViveroInterface[],
@@ -34,6 +35,12 @@ const fetcherVivero: Fetcher<ViveroInterface, string> = (url: string) =>
 
 export default function VistaVivero() {
   const router = useRouter();
+  const limpiarDisponilidad = useDisponibilidadStore(
+    (state) => state.limpiarDatos
+  );
+  const setDisponibilidad = useDisponibilidadStore(
+    (state) => state.setDisponibilidad
+  );
   const { data: vivero, error: errorVivero } = useSWR(
     `/api/viveros/${router.query.id}`,
     fetcherVivero
@@ -53,38 +60,6 @@ export default function VistaVivero() {
         setModo("nuevo");
       }
     };
-
-  const handleOnclickRow = (
-    disponibilidadId: DispiniblidadesDeUnViveroInterface
-  ) => {
-    if (expanded === false) {
-      if (rowSelected === false) {
-        setRowSelected(disponibilidadId.id);
-        setModo("nuevo");
-      } else if (rowSelected === disponibilidadId.id) {
-        setExpanded("panel-vivero");
-        setModo("edicion");
-      } else {
-        setRowSelected(disponibilidadId.id);
-        setModo("nuevo");
-      }
-    } else {
-      if (rowSelected === disponibilidadId.id) {
-        setRowSelected(false);
-        setExpanded(false);
-        setModo("nuevo");
-      } else {
-        setExpanded(false);
-        setRowSelected(disponibilidadId.id);
-        setModo("nuevo");
-      }
-    }
-  };
-
-  const handleClickAdd = () => {
-    setRowSelected(false);
-    setExpanded("panel-vivero");
-  };
 
   if (errorDisponibilidades | errorVivero) return <div>Failed to load</div>;
 
@@ -152,6 +127,51 @@ export default function VistaVivero() {
       </div>
     );
   }
+
+  const handleOnclickRow = (
+    disponibilidadSeleccionada: DispiniblidadesDeUnViveroInterface
+  ) => {
+    if (expanded === false) {
+      if (rowSelected === false) {
+        limpiarDisponilidad();
+        setRowSelected(disponibilidadSeleccionada.id);
+        setModo("nuevo");
+      } else if (rowSelected === disponibilidadSeleccionada.id) {
+        setDisponibilidad({
+          id: disponibilidadSeleccionada.id,
+          disponibles: disponibilidadSeleccionada.disponibles,
+          enProceso: disponibilidadSeleccionada.enProceso,
+          fecha: disponibilidadSeleccionada.fecha,
+          vivero: vivero.id,
+          especie: disponibilidadSeleccionada.especie,
+        });
+        setExpanded("panel-vivero");
+        setModo("edicion");
+      } else {
+        limpiarDisponilidad();
+        setRowSelected(disponibilidadSeleccionada.id);
+        setModo("nuevo");
+      }
+    } else {
+      if (rowSelected === disponibilidadSeleccionada.id) {
+        limpiarDisponilidad();
+        setRowSelected(false);
+        setExpanded(false);
+        setModo("nuevo");
+      } else {
+        limpiarDisponilidad();
+        setExpanded(false);
+        setRowSelected(disponibilidadSeleccionada.id);
+        setModo("nuevo");
+      }
+    }
+  };
+
+  const handleClickAdd = () => {
+    setRowSelected(false);
+    setExpanded("panel-vivero");
+  };
+
   return (
     <div className="h-full flex flex-col">
       <Accordion
@@ -217,7 +237,7 @@ export default function VistaVivero() {
                 <TableCell>{disponibilidad.especie.comun}</TableCell>
                 <TableCell>{disponibilidad.especie.cientifico}</TableCell>
                 <TableCell align="right">
-                  {dayjs().calendar(dayjs(disponibilidad.fecha))}
+                  {String(new Date(disponibilidad.fecha))}
                 </TableCell>
                 <TableCell align="right">{disponibilidad.enProceso}</TableCell>
                 <TableCell align="right">

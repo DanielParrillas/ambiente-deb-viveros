@@ -80,7 +80,9 @@ export default function Navbar() {
           <MenuIcon className="text-white" />
         </Fab>
         <Link href={"/"}>
-          <h1 className="ml-2 text-white text-xl mr-4 md:mr-8">Viveros</h1>
+          <h1 className="ml-2 text-white text-xl mr-4 md:mr-8 font-normal">
+            Viveros
+          </h1>
         </Link>
         <Breadcrumbs aria-label="breadcrumb">{listBreadcrumbs()}</Breadcrumbs>
       </div>
