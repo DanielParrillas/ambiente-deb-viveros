@@ -170,6 +170,7 @@ export default function VistaVivero() {
   const handleClickAdd = () => {
     setRowSelected(false);
     setExpanded("panel-vivero");
+    limpiarDisponilidad();
   };
 
   return (
@@ -192,6 +193,7 @@ export default function VistaVivero() {
           }
           aria-controls="panel-datos-personales"
           id="panel-datos-personales"
+          onClick={() => limpiarDisponilidad()}
           className="flex justify-between"
         >
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
