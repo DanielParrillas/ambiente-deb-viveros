@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { Fetcher } from "swr";
-import { DispiniblidadPorViveroInterface } from "../../api/disponibilidades/[id]";
-import { ViveroInterface } from "@/pages/api/viveros/[id]";
+import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
+import { ViveroInterface } from "@/pages/api";
 import axios from "axios";
 import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/es-mx";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -26,7 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DisponibilidadForm from "@/components/form/DisponibilidadForm";
 
 const fetcherDisponibilidades: Fetcher<
-  DispiniblidadPorViveroInterface[],
+  DispiniblidadesDeUnViveroInterface[],
   string
 > = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -56,7 +55,7 @@ export default function VistaVivero() {
     };
 
   const handleOnclickRow = (
-    disponibilidadId: DispiniblidadPorViveroInterface
+    disponibilidadId: DispiniblidadesDeUnViveroInterface
   ) => {
     if (expanded === false) {
       if (rowSelected === false) {

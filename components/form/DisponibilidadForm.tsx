@@ -65,7 +65,7 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
         />
       </div>
       <div className="flex mt-5 items-center md:basis-full justify-around md:justify-end md:pr-2 md:gap-8">
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="success">
           Guardar
         </Button>
         {props.modo === "edicion" ? (

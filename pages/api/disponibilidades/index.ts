@@ -1,75 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/db/prisma";
-import { Prisma } from "@prisma/client";
-
-//Creamos un variable que almacena la consulta
-
-const defaultQuery =
-  Prisma.validator<Prisma.ViveroDisponibilidadEspeciesArgs>()({
-    select: {
-      id: true,
-      fecha: true,
-      disponibles: true,
-      enProceso: true,
-      vivero: {
-        select: {
-          id: true,
-          nombre: true,
-        },
-      },
-      especie: {
-        select: {
-          id: true,
-          comun: true,
-          cientifico: true,
-        },
-      },
-    },
-  });
-
-const especieQuery = Prisma.validator<Prisma.ViveroEspecieArgs>()({
-  select: {
-    id: true,
-    comun: true,
-    cientifico: true,
-    disponibilidades: {
-      select: {
-        id: true,
-        fecha: true,
-        disponibles: true,
-        enProceso: true,
-        vivero: {
-          select: {
-            id: true,
-            nombre: true,
-          },
-        },
-      },
-    },
-  },
-});
-
-const viveroQuery = Prisma.validator<Prisma.ViveroArgs>()({
-  select: {
-    id: true,
-    nombre: true,
-    disponibilidadesPorEspecie: {
-      select: {
-        disponibles: true,
-        enProceso: true,
-        especie: {
-          select: {
-            id: true,
-            comun: true,
-            cientifico: true,
-          },
-        },
-      },
-    },
-  },
-});
-export interface DisponibilidadPorViveroInterface
-  extends Prisma.ViveroGetPayload<typeof viveroQuery> {}
+import { prisma } from "@/prisma/client";
+import {
+  defaultQuery,
+  queryPorEspecie,
+  queryPorVivero,
+} from "@/prisma/queries/disponibilidadesQueries";
 
 export default async function handler(
   req: NextApiRequest,
@@ -95,7 +30,12 @@ const saveDisponibilidad = async (
   res: NextApiResponse
 ) => {
   try {
-    const {} = req.body;
+    const { newDisponibilidad } = req.body;
+    // await prisma.viveroDisponibilidadEspecies.create({
+    //   data: { ...newDisponibilidad },
+    // });
+
+    return res.status(200).json(newDisponibilidad);
     console.log("creating a new disponibilidad");
     console.log(req.body);
   } catch (error) {
@@ -126,7 +66,7 @@ const getDisponibilidadesPorVivero = async (
   res: NextApiResponse
 ) => {
   try {
-    const disponibilidades = await prisma.vivero.findMany(viveroQuery);
+    const disponibilidades = await prisma.vivero.findMany(queryPorVivero);
     res.json(disponibilidades);
   } catch (error) {
     console.log(error);
@@ -141,7 +81,9 @@ const getDisponibilidadesPorEspecie = async (
   res: NextApiResponse
 ) => {
   try {
-    const disponibilidades = await prisma.viveroEspecie.findMany(especieQuery);
+    const disponibilidades = await prisma.viveroEspecie.findMany(
+      queryPorEspecie
+    );
     res.json(disponibilidades);
   } catch (error) {
     console.log(error);

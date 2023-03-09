@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/db/prisma";
+import { prisma } from "@/prisma/client";
+import { defaultQuery } from "@/prisma/queries/especiesQueries";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,14 +19,7 @@ const getEspecie = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const especie = await prisma.viveroEspecie.findUnique({
       where: { id: parseInt(id as string) },
-      select: {
-        id: true,
-        comun: true,
-        cientifico: true,
-        tipo: true,
-        estado: true,
-        categoria: true,
-      },
+      select: { ...defaultQuery.select },
     });
     res.json(especie);
   } catch (error) {

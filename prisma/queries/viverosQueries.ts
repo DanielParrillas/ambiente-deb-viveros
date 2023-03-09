@@ -1,8 +1,27 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/prisma/client";
 
-const defaultQuery = Prisma.validator<Prisma.ViveroArgs>()({
+export const defaultQuery = Prisma.validator<Prisma.ViveroArgs>()({
+  select: {
+    id: true,
+    nombre: true,
+    meta: true,
+    estaActivo: true,
+    latitud: true,
+    longitud: true,
+    direccion: true,
+    municipio: {
+      select: {
+        id: true,
+        nombre: true,
+        departamento: { select: { id: true, nombre: true } },
+      },
+    },
+  },
+});
+export interface ViveroInterface
+  extends Prisma.ViveroGetPayload<typeof defaultQuery> {}
+
+export const completeQuery = Prisma.validator<Prisma.ViveroArgs>()({
   select: {
     id: true,
     nombre: true,
@@ -37,13 +56,12 @@ const defaultQuery = Prisma.validator<Prisma.ViveroArgs>()({
         },
       },
     },
-    asignacionesPorSolicitud: {},
+    asignacionesPorSolicitud: {
+      select: {
+        id: true,
+      },
+    },
   },
 });
-export interface ViveroInterface
-  extends Prisma.ViveroGetPayload<typeof defaultQuery> {}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {}
+export interface ViveroCompleteInterface
+  extends Prisma.ViveroGetPayload<typeof completeQuery> {}

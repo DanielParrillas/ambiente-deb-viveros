@@ -1,27 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/db/prisma";
-import { Prisma } from "@prisma/client";
-
-//Creamos un variable que almacena la consulta
-const query = Prisma.validator<Prisma.ViveroDisponibilidadEspeciesArgs>()({
-  select: {
-    id: true,
-    disponibles: true,
-    enProceso: true,
-    fecha: true,
-    especie: {
-      select: {
-        id: true,
-        comun: true,
-        cientifico: true,
-      },
-    },
-  },
-});
-//Se crea un tipo a partir de la consulta
-type QueryType = Prisma.ViveroDisponibilidadEspeciesGetPayload<typeof query>;
-//Se exporta para que pueda ser utilizada por el fronted
-export interface DispiniblidadPorViveroInterface extends QueryType {}
+import { prisma } from "@/prisma/client";
+import { queryDeUnVivero } from "@/prisma/queries/disponibilidadesQueries";
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,7 +35,7 @@ const getDisponibilidad = async (req: NextApiRequest, res: NextApiResponse) => {
         where: {
           viveroId: parseInt(id as string),
         },
-        select: { ...query.select },
+        select: { ...queryDeUnVivero.select },
       }
     );
 

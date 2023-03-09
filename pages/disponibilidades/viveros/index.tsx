@@ -7,12 +7,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { DisponibilidadPorViveroInterface } from "../../api/disponibilidades";
+import { DisponibilidadesPorViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const fetcher: Fetcher<DisponibilidadPorViveroInterface[], string> = (
+const fetcher: Fetcher<DisponibilidadesPorViveroInterface[], string> = (
   url: string
 ) =>
   axios

@@ -1,6 +1,6 @@
 import useSWR, { Fetcher } from "swr";
 import axios from "axios";
-import { EspecieInterfaceSimple } from "@/pages/api/especies";
+import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -10,7 +10,7 @@ interface EspecieAutoCompleteProps {
   required?: boolean;
 }
 
-const fetcher: Fetcher<EspecieInterfaceSimple[], string> = (url: string) =>
+const fetcher: Fetcher<EspecieSimpleInterface[], string> = (url: string) =>
   axios
     .get(url, {
       params: {

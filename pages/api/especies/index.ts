@@ -1,29 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/db/prisma";
-import { Prisma } from "@prisma/client";
-
-const defaultQuery = Prisma.validator<Prisma.ViveroEspecieArgs>()({
-  select: {
-    id: true,
-    comun: true,
-    cientifico: true,
-    categoria: true,
-    estado: true,
-    tipo: true,
-  },
-});
-export interface EspecieInterfaceDefault
-  extends Prisma.ViveroEspecieGetPayload<typeof defaultQuery> {}
-
-const simpleQuery = Prisma.validator<Prisma.ViveroEspecieArgs>()({
-  select: {
-    id: true,
-    comun: true,
-    cientifico: true,
-  },
-});
-export interface EspecieInterfaceSimple
-  extends Prisma.ViveroEspecieGetPayload<typeof simpleQuery> {}
+import { prisma } from "@/prisma/client";
+import { defaultQuery, simpleQuery } from "@/prisma/queries/especiesQueries";
 
 export default async function handler(
   req: NextApiRequest,

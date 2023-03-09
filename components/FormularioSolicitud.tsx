@@ -35,6 +35,7 @@ import ForestIcon from "@mui/icons-material/Forest";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { forwardRef, useState } from "react";
 import { IMaskInput } from "react-imask";
+import axios from 'axios';
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -86,8 +87,15 @@ export default function FormularioSolicitud() {
       [event.target.name]: event.target.value,
     });
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const res = await axios.post(`/api/disponibilidades`)
+  };
+
   return (
-    <form className="h-full p-4">
+    <form onSubmit={handleSubmit} className="h-full p-4">
       <Accordion
         expanded={expanded === "panel-datos-personales"}
         onChange={handleExpanded("panel-datos-personales")}
