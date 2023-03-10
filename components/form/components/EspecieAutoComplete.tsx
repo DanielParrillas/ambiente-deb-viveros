@@ -42,7 +42,7 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
   if (!especies) return <div>sdf</div>;
 
   const onChange = (event: React.SyntheticEvent, value: any) => {
-    console.log(value);
+    //console.log(value);
     if (value !== null) {
       const encontrado = disponibilidadesDeUnVivero.find(
         (disponibilidad) => disponibilidad.especie.id === value.especie.id
@@ -56,10 +56,10 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
           especie: encontrado.especie,
           fecha: encontrado.fecha,
         });
-        console.log("encontrado");
+        //console.log("encontrado");
       } else {
-        console.log("no encontrado");
-        limpiarDatosDisponibilidad();
+        //console.log("no encontrado");
+        limpiarDatosDisponibilidad("vivero");
         setDisponibilidad({
           ...disponibilidad,
           id: "",
@@ -67,7 +67,7 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
         });
       }
     } else {
-      console.log("safd");
+      //console.log("safd");
 
       setDisponibilidad({
         ...disponibilidad,
@@ -99,7 +99,9 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
       //   `${option.especie.cientifico} - ${option.especie.comun}`
       // }
       onChange={onChange}
-      renderInput={(params) => <TextField {...params} label="Especie" />}
+      renderInput={(params) => (
+        <TextField required {...params} label="Especie" />
+      )}
       {...props}
     />
   );

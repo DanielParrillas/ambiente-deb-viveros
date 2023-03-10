@@ -90,7 +90,7 @@ export default function VistaVivero() {
   ) => {
     if (expanded === false) {
       if (rowSelected === false) {
-        limpiarDisponilidad();
+        // limpiarDisponilidad("vivero");
         setRowSelected(disponibilidadSeleccionada.id);
       } else if (rowSelected === disponibilidadSeleccionada.id) {
         setDisponibilidad({
@@ -98,21 +98,21 @@ export default function VistaVivero() {
           disponibles: disponibilidadSeleccionada.disponibles,
           enProceso: disponibilidadSeleccionada.enProceso,
           fecha: disponibilidadSeleccionada.fecha,
-          vivero: vivero.id,
+          vivero: { id: vivero.id, nombre: vivero.nombre },
           especie: disponibilidadSeleccionada.especie,
         });
         setExpanded("panel-vivero");
       } else {
-        limpiarDisponilidad();
+        // limpiarDisponilidad("vivero");
         setRowSelected(disponibilidadSeleccionada.id);
       }
     } else {
       if (rowSelected === disponibilidadSeleccionada.id) {
-        limpiarDisponilidad();
+        limpiarDisponilidad("vivero");
         setRowSelected(false);
         setExpanded(false);
       } else {
-        limpiarDisponilidad();
+        limpiarDisponilidad("vivero");
         setExpanded(false);
         setRowSelected(disponibilidadSeleccionada.id);
       }
@@ -122,7 +122,7 @@ export default function VistaVivero() {
   const handleClickAdd = () => {
     setRowSelected(false);
     setExpanded("panel-vivero");
-    limpiarDisponilidad();
+    limpiarDisponilidad("vivero");
   };
 
   return (
@@ -147,7 +147,7 @@ export default function VistaVivero() {
           }
           aria-controls="panel-datos-personales"
           id="panel-datos-personales"
-          onClick={() => limpiarDisponilidad()}
+          onClick={() => limpiarDisponilidad("vivero")}
           className="flex justify-between"
         >
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
@@ -186,7 +186,8 @@ export default function VistaVivero() {
                 onClick={() => handleOnclickRow(disponibilidadItem)}
                 className={
                   disponibilidadItem.id === rowSelected ||
-                  disponibilidadItem.id === disponibilidad.id
+                  (disponibilidadItem.id === disponibilidad.id &&
+                    disponibilidadItem.id === rowSelected)
                     ? "transition ease-in duration-100 bg-gray-200 cursor-pointer hover:bg-gray-300"
                     : "transition ease-in duration-75 cursor-pointer hover:bg-gray-50"
                 }

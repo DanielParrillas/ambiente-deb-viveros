@@ -10,6 +10,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const sideBar = useSideBarStore();
+  const cerrarSideBar = useSideBarStore((state) => state.cerrarSideBar);
   return (
     <>
       <Navbar />
@@ -18,7 +19,14 @@ export default function Layout({ children }: LayoutProps) {
         <SideBar />
       </Slide> */}
 
-      <main className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-gray-100">
+      <main
+        className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-gray-100"
+        onClick={() => {
+          if (sideBar.estaVisible === true) {
+            cerrarSideBar();
+          }
+        }}
+      >
         <div className="w-full h-full overflow-y-auto p-4">{children}</div>
       </main>
     </>

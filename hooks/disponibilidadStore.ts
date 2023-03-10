@@ -1,10 +1,7 @@
 import { create } from "zustand";
-import {
-  NewDisponibilidad,
-  UpdatedDisponibilidad,
-} from "@/prisma/queries/disponibilidadesQueries";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
+import { ViverSimpleInterface } from "@/prisma/queries/viverosQueries";
 
 export const initialState = {
   id: "",
@@ -21,13 +18,14 @@ export interface DisponibilidadStore {
   disponibles: string | number;
   enProceso: string | number;
   especie: EspecieSimpleInterface | string;
-  vivero: string | number;
+  vivero: ViverSimpleInterface | string;
 }
 
 interface DisponibilidadState {
   disponibilidad: DisponibilidadStore;
   disponibilidadesDeUnVivero: DispiniblidadesDeUnViveroInterface[];
-  limpiarDatos: () => void;
+  // limpiarDatos: (mantener?: "vivero" | "especie") => void;
+  limpiarDatos: (mantener: "vivero" | "especie") => void;
   setDisponibilidad: (data: DisponibilidadStore) => void;
   guardarDisponibilidad: (data: DisponibilidadStore) => void;
   setDisponibilidadDeunVivero: (
@@ -38,7 +36,31 @@ interface DisponibilidadState {
 export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
   disponibilidad: initialState,
   disponibilidadesDeUnVivero: [],
-  limpiarDatos: () => set((state) => ({ disponibilidad: initialState })),
+  limpiarDatos: (mantener) => {
+    switch (mantener) {
+      case "especie":
+        set((state) => ({
+          disponibilidad: {
+            ...initialState,
+            especie: state.disponibilidad.especie,
+          },
+        }));
+        break;
+      case "vivero":
+        set((state) => ({
+          disponibilidad: {
+            ...initialState,
+            vivero: state.disponibilidad.vivero,
+          },
+        }));
+        break;
+
+      // default:
+      //   console.log("defaul");
+      //   set((state) => ({ disponibilidad: initialState }));
+      //   break;
+    }
+  },
   setDisponibilidad: (data) =>
     set((state) => ({ disponibilidad: { ...data } })),
   guardarDisponibilidad: (data: any) =>

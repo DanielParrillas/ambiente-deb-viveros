@@ -22,16 +22,24 @@ export default function DisponibilidadForm() {
   );
 
   useEffect(() => {
-    limpiarDatosDisponibilidad();
+    limpiarDatosDisponibilidad("vivero");
   }, []);
 
-  console.log(disponibilidad);
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //console.log(disponibilidad);
+  const handleSubmit = (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
+    console.log(disponibilidad);
   };
 
   return (
-    <form className="flex flex-col md:flex-row md:flex-wrap">
+    <form
+      className="flex flex-col md:flex-row md:flex-wrap"
+      onSubmit={handleSubmit}
+    >
       <div className="basis-full lg:basis-3/6 p-2">
         <EspecieAutoComplete required />
       </div>
@@ -92,11 +100,16 @@ export default function DisponibilidadForm() {
         />
       </div>
       <div className="flex mt-5 items-center md:basis-full justify-around md:justify-end md:pr-2 md:gap-8">
-        <Button variant="contained" color="primary">
-          Guardar
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className="normal-case"
+        >
+          {disponibilidad.id === "" ? "Guardar" : "Actualizar"}
         </Button>
         {disponibilidad.id !== "" ? (
-          <Button variant="contained" color="error">
+          <Button variant="contained" color="error" className="normal-case">
             Eliminar
           </Button>
         ) : (

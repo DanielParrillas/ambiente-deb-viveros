@@ -11,6 +11,7 @@ import { DisponibilidadesPorViveroInterface } from "@/prisma/queries/disponibili
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 
 const fetcher: Fetcher<DisponibilidadesPorViveroInterface[], string> = (
   url: string
@@ -26,6 +27,9 @@ export default function TablaViveros() {
   const router = useRouter();
   const { data: viveros, error } = useSWR("/api/disponibilidades", fetcher);
   const [rowSelected, setRowSelected] = useState<string | false>(false);
+  const setDisponibilidad = useDisponibilidadStore(
+    (state) => state.setDisponibilidad
+  );
 
   if (error)
     return (

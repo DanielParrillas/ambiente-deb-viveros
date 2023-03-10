@@ -20,7 +20,7 @@ export default function Navbar() {
     const namesSplit = router.pathname.split("/");
     let links: JSX.Element[] = [];
     let acumuladorLink: string = "";
-    console.log(router.pathname);
+    //console.log(router.pathname);
     if (router.pathname === "/404") {
       links.push(
         <Link
@@ -34,7 +34,7 @@ export default function Navbar() {
       return links;
     }
     if (router.pathname === "/") {
-      console.log("is home");
+      //console.log("is home");
       links.push(
         <Typography key="typography-home-not-url" className="text-slate-400">
           Home
@@ -44,7 +44,7 @@ export default function Navbar() {
     } else {
       namesSplit.slice(1, namesSplit.length - 1).forEach((name, i) => {
         acumuladorLink += "/" + name;
-        console.log(acumuladorLink);
+        //console.log(acumuladorLink);
         links.push(
           <Link
             key={acumuladorLink + i}
@@ -55,9 +55,9 @@ export default function Navbar() {
           </Link>
         );
       });
-      console.log("query");
+      //console.log("query");
 
-      console.log(router.query);
+      //console.log(router.query);
       if (JSON.stringify(router.query) === "{}") {
         links.push(
           <Typography key={"lastlink"} className="text-slate-300">
