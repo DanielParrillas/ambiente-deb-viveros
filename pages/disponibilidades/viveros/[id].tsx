@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { Fetcher } from "swr";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
@@ -35,6 +35,12 @@ const fetcherVivero: Fetcher<ViveroInterface, string> = (url: string) =>
 
 export default function VistaVivero() {
   const router = useRouter();
+  const disponibilidadesDeUnVivero = useDisponibilidadStore(
+    (state) => state.disponibilidadesDeUnVivero
+  );
+  const setDisponibilidadDeunVivero = useDisponibilidadStore(
+    (state) => state.setDisponibilidadDeunVivero
+  );
   const limpiarDisponilidad = useDisponibilidadStore(
     (state) => state.limpiarDatos
   );
@@ -61,71 +67,16 @@ export default function VistaVivero() {
       }
     };
 
-  if (errorDisponibilidades | errorVivero) return <div>Failed to load</div>;
+  useEffect(() => {
+    if (!!disponibilidades) {
+      setDisponibilidadDeunVivero(disponibilidades);
+    }
+  }, [disponibilidades, errorDisponibilidades]);
 
-  if (!disponibilidades || !vivero) {
-    return (
-      <div className="h-full flex flex-col">
-        <Accordion
-          expanded={expanded === "panel-vivero"}
-          onChange={handleExpanded("panel-vivero")}
-          className="shadow-none"
-        >
-          <AccordionSummary
-            expandIcon={
-              <Fab
-                color="success"
-                aria-label="add"
-                size="small"
-                className="order-last"
-              >
-                <AddIcon />
-              </Fab>
-            }
-            aria-controls="panel-datos-personales"
-            id="panel-datos-personales"
-            className="flex justify-between"
-          >
-            Vivero ...
-          </AccordionSummary>
-          <AccordionDetails>
-            <DisponibilidadForm modo={modo} />
-          </AccordionDetails>
-        </Accordion>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className="bg-marn-light text-white">
-                  Común
-                </TableCell>
-                <TableCell className="bg-marn-light text-white">
-                  Especie
-                </TableCell>
-                <TableCell className="bg-marn-light text-white">
-                  Fecha
-                </TableCell>
-                <TableCell align="right" className="bg-marn-light text-white">
-                  En proceso
-                </TableCell>
-                <TableCell align="right" className="bg-marn-light text-white">
-                  Disponibles
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>cargando...</TableCell>
-                <TableCell>cargando...</TableCell>
-                <TableCell>cargando...</TableCell>
-                <TableCell>cargando...</TableCell>
-                <TableCell>cargando...</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-    );
+  if (errorVivero) return <div>Failed to load</div>;
+
+  if (!vivero) {
+    return <div className="h-full flex flex-col">cargando...</div>;
   }
 
   const handleOnclickRow = (
@@ -176,7 +127,9 @@ export default function VistaVivero() {
   return (
     <div className="h-full flex flex-col">
       <Accordion
-        expanded={expanded === "panel-vivero" || disponibilidades.length === 0}
+        expanded={
+          expanded === "panel-vivero" || disponibilidadesDeUnVivero.length === 0
+        }
         onChange={handleExpanded("panel-vivero")}
         className="shadow-none"
       >
@@ -225,7 +178,7 @@ export default function VistaVivero() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {disponibilidades.map((disponibilidad) => (
+            {disponibilidadesDeUnVivero.map((disponibilidad) => (
               <TableRow
                 key={`disponiblidad-v-row-${disponibilidad.id}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

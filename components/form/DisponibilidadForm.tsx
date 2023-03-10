@@ -5,7 +5,7 @@ import {
   useDisponibilidadStore,
   initialState as initialStateDisponibilidad,
 } from "@/hooks/disponibilidadStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 interface Disponibilidad
@@ -24,6 +24,14 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
   const setDisponibilidad = useDisponibilidadStore(
     (state) => state.setDisponibilidad
   );
+  const limpiarDatosDisponibilidad = useDisponibilidadStore(
+    (state) => state.limpiarDatos
+  );
+
+  useEffect(() => {
+    limpiarDatosDisponibilidad();
+  }, []);
+
   console.log(disponibilidad);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +94,7 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
           InputLabelProps={{
             shrink: true,
           }}
-          value={String(disponibilidad.fecha)}
+          value={disponibilidad.fecha.toString().slice(0, 10)}
           onChange={(e) => {
             setDisponibilidad({
               ...disponibilidad,
