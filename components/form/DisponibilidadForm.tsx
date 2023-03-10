@@ -1,23 +1,16 @@
 import EspecieAutoComplete from "./components/EspecieAutoComplete";
 import { TextField, Button } from "@mui/material";
 import { Prisma } from "@prisma/client";
-import {
-  useDisponibilidadStore,
-  initialState as initialStateDisponibilidad,
-} from "@/hooks/disponibilidadStore";
-import { useEffect, useState } from "react";
+import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
+import { useEffect } from "react";
 import dayjs from "dayjs";
 
 interface Disponibilidad
   extends Prisma.ViveroDisponibilidadEspeciesUpdateInput {
   id: number;
 }
-interface DisponibilidadFormProps {
-  disponibilidad?: Disponibilidad;
-  modo: "nuevo" | "edicion";
-}
 
-export default function DisponibilidadForm(props: DisponibilidadFormProps) {
+export default function DisponibilidadForm() {
   const disponibilidad = useDisponibilidadStore(
     (state) => state.disponibilidad
   );
@@ -37,18 +30,10 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
     e.preventDefault();
   };
 
-  console.log("fechas");
-  console.log(disponibilidad.fecha);
-  console.log(typeof disponibilidad.fecha);
-  console.log(dayjs().format(String(new Date(disponibilidad.fecha))));
-
   return (
     <form className="flex flex-col md:flex-row md:flex-wrap">
       <div className="basis-full lg:basis-3/6 p-2">
-        <EspecieAutoComplete
-          required
-          readOnly={props.modo === "nuevo" ? false : true}
-        />
+        <EspecieAutoComplete required />
       </div>
       <div className="basis-1/3 lg:basis-1/6 p-2">
         <TextField
@@ -107,10 +92,10 @@ export default function DisponibilidadForm(props: DisponibilidadFormProps) {
         />
       </div>
       <div className="flex mt-5 items-center md:basis-full justify-around md:justify-end md:pr-2 md:gap-8">
-        <Button variant="contained" color="success">
+        <Button variant="contained" color="primary">
           Guardar
         </Button>
-        {props.modo === "edicion" ? (
+        {disponibilidad.id !== "" ? (
           <Button variant="contained" color="error">
             Eliminar
           </Button>

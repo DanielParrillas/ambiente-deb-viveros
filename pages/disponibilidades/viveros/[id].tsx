@@ -4,7 +4,7 @@ import useSWR, { Fetcher } from "swr";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import { ViveroInterface } from "@/pages/api";
 import axios from "axios";
-import dayjs from "dayjs";
+import dayjs from "dayjs"; //?
 import "dayjs/locale/es-mx";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -38,6 +38,9 @@ export default function VistaVivero() {
   const disponibilidadesDeUnVivero = useDisponibilidadStore(
     (state) => state.disponibilidadesDeUnVivero
   );
+  const disponibilidad = useDisponibilidadStore(
+    (state) => state.disponibilidad
+  );
   const setDisponibilidadDeunVivero = useDisponibilidadStore(
     (state) => state.setDisponibilidadDeunVivero
   );
@@ -57,13 +60,11 @@ export default function VistaVivero() {
   );
   const [expanded, setExpanded] = useState<string | false>(false);
   const [rowSelected, setRowSelected] = useState<number | false>(false);
-  const [modo, setModo] = useState<"nuevo" | "edicion">("nuevo");
 
   const handleExpanded =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
       if (!isExpanded) {
-        setModo("nuevo");
       }
     };
 
@@ -71,7 +72,12 @@ export default function VistaVivero() {
     if (!!disponibilidades) {
       setDisponibilidadDeunVivero(disponibilidades);
     }
-  }, [disponibilidades, errorDisponibilidades]);
+    if (typeof disponibilidad.id === "number") {
+      setRowSelected(disponibilidad.id);
+    } else {
+      setRowSelected(false);
+    }
+  }, [disponibilidades, errorDisponibilidades, disponibilidad]);
 
   if (errorVivero) return <div>Failed to load</div>;
 
@@ -86,7 +92,6 @@ export default function VistaVivero() {
       if (rowSelected === false) {
         limpiarDisponilidad();
         setRowSelected(disponibilidadSeleccionada.id);
-        setModo("nuevo");
       } else if (rowSelected === disponibilidadSeleccionada.id) {
         setDisponibilidad({
           id: disponibilidadSeleccionada.id,
@@ -97,23 +102,19 @@ export default function VistaVivero() {
           especie: disponibilidadSeleccionada.especie,
         });
         setExpanded("panel-vivero");
-        setModo("edicion");
       } else {
         limpiarDisponilidad();
         setRowSelected(disponibilidadSeleccionada.id);
-        setModo("nuevo");
       }
     } else {
       if (rowSelected === disponibilidadSeleccionada.id) {
         limpiarDisponilidad();
         setRowSelected(false);
         setExpanded(false);
-        setModo("nuevo");
       } else {
         limpiarDisponilidad();
         setExpanded(false);
         setRowSelected(disponibilidadSeleccionada.id);
-        setModo("nuevo");
       }
     }
   };
@@ -136,12 +137,12 @@ export default function VistaVivero() {
         <AccordionSummary
           expandIcon={
             <Fab
-              color={`${modo === "nuevo" ? "success" : "warning"}`}
+              color={`${disponibilidad.id === "" ? "success" : "warning"}`}
               aria-label="add"
               size="small"
               onClick={() => handleClickAdd()}
             >
-              {modo === "nuevo" ? <AddIcon /> : <EditIcon />}
+              {disponibilidad.id === "" ? <AddIcon /> : <EditIcon />}
             </Fab>
           }
           aria-controls="panel-datos-personales"
@@ -152,7 +153,7 @@ export default function VistaVivero() {
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <DisponibilidadForm modo={modo} />
+          <DisponibilidadForm />
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Paper} className="h-full">
@@ -178,25 +179,28 @@ export default function VistaVivero() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {disponibilidadesDeUnVivero.map((disponibilidad) => (
+            {disponibilidadesDeUnVivero.map((disponibilidadItem) => (
               <TableRow
-                key={`disponiblidad-v-row-${disponibilidad.id}`}
+                key={`disponiblidad-v-row-${disponibilidadItem.id}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                onClick={() => handleOnclickRow(disponibilidad)}
+                onClick={() => handleOnclickRow(disponibilidadItem)}
                 className={
-                  disponibilidad.id === rowSelected
+                  disponibilidadItem.id === rowSelected ||
+                  disponibilidadItem.id === disponibilidad.id
                     ? "transition ease-in duration-100 bg-gray-200 cursor-pointer hover:bg-gray-300"
                     : "transition ease-in duration-75 cursor-pointer hover:bg-gray-50"
                 }
               >
-                <TableCell>{disponibilidad.especie.comun}</TableCell>
-                <TableCell>{disponibilidad.especie.cientifico}</TableCell>
+                <TableCell>{disponibilidadItem.especie.comun}</TableCell>
+                <TableCell>{disponibilidadItem.especie.cientifico}</TableCell>
                 <TableCell align="right">
-                  {String(new Date(disponibilidad.fecha))}
+                  {String(new Date(disponibilidadItem.fecha))}
                 </TableCell>
-                <TableCell align="right">{disponibilidad.enProceso}</TableCell>
                 <TableCell align="right">
-                  {disponibilidad.disponibles}
+                  {disponibilidadItem.enProceso}
+                </TableCell>
+                <TableCell align="right">
+                  {disponibilidadItem.disponibles}
                 </TableCell>
               </TableRow>
             ))}
