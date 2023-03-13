@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
-import { ViverSimpleInterface } from "@/prisma/queries/viverosQueries";
+import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
 
 export const initialState = {
   id: "",
@@ -18,14 +18,14 @@ export interface DisponibilidadStore {
   disponibles: string | number;
   enProceso: string | number;
   especie: EspecieSimpleInterface | string;
-  vivero: ViverSimpleInterface | string;
+  vivero: ViveroSimpleInterface | string;
 }
 
 interface DisponibilidadState {
   disponibilidad: DisponibilidadStore;
   disponibilidadesDeUnVivero: DispiniblidadesDeUnViveroInterface[];
   // limpiarDatos: (mantener?: "vivero" | "especie") => void;
-  limpiarDatos: (mantener: "vivero" | "especie") => void;
+  limpiarDatos: (mantener: "vivero" | "especie" | "nada") => void;
   setDisponibilidad: (data: DisponibilidadStore) => void;
   guardarDisponibilidad: (data: DisponibilidadStore) => void;
   setDisponibilidadDeunVivero: (
@@ -55,10 +55,9 @@ export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
         }));
         break;
 
-      // default:
-      //   console.log("defaul");
-      //   set((state) => ({ disponibilidad: initialState }));
-      //   break;
+      case "nada":
+        set((state) => ({ disponibilidad: initialState }));
+        break;
     }
   },
   setDisponibilidad: (data) =>

@@ -27,7 +27,7 @@ export const simpleQuery = Prisma.validator<Prisma.ViveroArgs>()({
     nombre: true,
   },
 });
-export interface ViverSimpleInterface
+export interface ViveroSimpleInterface
   extends Prisma.ViveroGetPayload<typeof simpleQuery> {}
 
 export const completeQuery = Prisma.validator<Prisma.ViveroArgs>()({

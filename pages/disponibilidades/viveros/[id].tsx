@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { Fetcher } from "swr";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
-import { ViveroInterface } from "@/pages/api";
 import axios from "axios";
 import dayjs from "dayjs"; //?
 import "dayjs/locale/es-mx";
@@ -24,13 +23,14 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DisponibilidadForm from "@/components/form/DisponibilidadForm";
 import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
+import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
 
 const fetcherDisponibilidades: Fetcher<
   DispiniblidadesDeUnViveroInterface[],
   string
 > = (url: string) => axios.get(url).then((res) => res.data);
 
-const fetcherVivero: Fetcher<ViveroInterface, string> = (url: string) =>
+const fetcherVivero: Fetcher<ViveroSimpleInterface, string> = (url: string) =>
   axios.get(url).then((res) => res.data);
 
 export default function VistaVivero() {
@@ -50,7 +50,7 @@ export default function VistaVivero() {
   const setDisponibilidad = useDisponibilidadStore(
     (state) => state.setDisponibilidad
   );
-  const { data: vivero, error: errorVivero } = useSWR(
+  const { data: viveroData, error: errorVivero } = useSWR(
     `/api/viveros/${router.query.id}`,
     fetcherVivero
   );
@@ -60,6 +60,8 @@ export default function VistaVivero() {
   );
   const [expanded, setExpanded] = useState<string | false>(false);
   const [rowSelected, setRowSelected] = useState<number | false>(false);
+
+  const [vivero, setVivero] = useState<ViveroSimpleInterface>();
 
   const handleExpanded =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -79,31 +81,34 @@ export default function VistaVivero() {
     }
   }, [disponibilidades, errorDisponibilidades, disponibilidad]);
 
-  if (errorVivero) return <div>Failed to load</div>;
-
-  if (!vivero) {
-    return <div className="h-full flex flex-col">cargando...</div>;
-  }
+  useEffect(() => {
+    limpiarDisponilidad("nada");
+    if (!!viveroData) {
+      setVivero(viveroData);
+      setDisponibilidad({ ...disponibilidad, vivero: viveroData });
+    }
+    if (errorVivero) {
+      console.log("error en la api de vivero");
+    }
+  }, [viveroData]);
 
   const handleOnclickRow = (
     disponibilidadSeleccionada: DispiniblidadesDeUnViveroInterface
   ) => {
     if (expanded === false) {
       if (rowSelected === false) {
-        // limpiarDisponilidad("vivero");
         setRowSelected(disponibilidadSeleccionada.id);
       } else if (rowSelected === disponibilidadSeleccionada.id) {
         setDisponibilidad({
+          ...disponibilidad,
           id: disponibilidadSeleccionada.id,
           disponibles: disponibilidadSeleccionada.disponibles,
           enProceso: disponibilidadSeleccionada.enProceso,
           fecha: disponibilidadSeleccionada.fecha,
-          vivero: { id: vivero.id, nombre: vivero.nombre },
           especie: disponibilidadSeleccionada.especie,
         });
         setExpanded("panel-vivero");
       } else {
-        // limpiarDisponilidad("vivero");
         setRowSelected(disponibilidadSeleccionada.id);
       }
     } else {
@@ -195,7 +200,9 @@ export default function VistaVivero() {
                 <TableCell>{disponibilidadItem.especie.comun}</TableCell>
                 <TableCell>{disponibilidadItem.especie.cientifico}</TableCell>
                 <TableCell align="right">
-                  {String(new Date(disponibilidadItem.fecha))}
+                  {dayjs
+                    .tz(String(disponibilidadItem.fecha), "UTC")
+                    .format("LL")}
                 </TableCell>
                 <TableCell align="right">
                   {disponibilidadItem.enProceso}
