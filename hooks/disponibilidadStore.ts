@@ -2,10 +2,12 @@ import { create } from "zustand";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
 import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
+import { Dayjs } from "dayjs";
+import axios from "axios";
 
 export interface DisponibilidadStore {
   id: "" | number;
-  fecha: "" | string;
+  fecha: "" | string | Date | Dayjs;
   disponibles: "" | number;
   enProceso: "" | number;
   especie: EspecieSimpleInterface | "";
@@ -31,9 +33,9 @@ interface DisponibilidadState {
   setDisponibilidadDeunVivero: (
     data: DispiniblidadesDeUnViveroInterface[]
   ) => void;
-  addTempDisponibilidadDeUnVivero: (
-    temp: DispiniblidadesDeUnViveroInterface
-  ) => void;
+  // actualizarDisponibilidadesDeunVivero: (
+  //   temp: DispiniblidadesDeUnViveroInterface
+  // ) => void;
 }
 
 export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
@@ -68,8 +70,4 @@ export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
   guardarDisponibilidad: (data) => set((state) => ({ disponibilidad: data })),
   setDisponibilidadDeunVivero: (data: DispiniblidadesDeUnViveroInterface[]) =>
     set((state) => ({ disponibilidadesDeUnVivero: data })),
-  addTempDisponibilidadDeUnVivero: (temp) =>
-    set((state) => ({
-      disponibilidadesDeUnVivero: [...state.disponibilidadesDeUnVivero, temp],
-    })),
 }));

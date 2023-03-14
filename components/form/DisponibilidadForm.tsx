@@ -30,8 +30,9 @@ export default function DisponibilidadForm() {
 
   const {
     limpiarDatos: limpiarDatosDisponibilidad,
-    addTempDisponibilidadDeUnVivero,
     setDisponibilidad,
+    setDisponibilidadDeunVivero,
+    disponibilidadesDeUnVivero,
   } = useDisponibilidadStore();
 
   useEffect(() => {
@@ -61,14 +62,13 @@ export default function DisponibilidadForm() {
         viveroId: disponibilidad.vivero.id,
       };
       console.log(data);
-      const res = await axios
+      await axios
         .post("/api/disponibilidades", data)
         .then((response) => {
-          console.log(response);
           const temp: DispiniblidadesDeUnViveroInterface = response.data;
+          console.log(temp);
+          setDisponibilidad({ ...temp, vivero: disponibilidad.vivero });
           lanzarAlerta("Nueva disponibilidad creada", { severity: "success" });
-          addTempDisponibilidadDeUnVivero(temp);
-          limpiarDatosDisponibilidad("vivero");
         })
         .catch((error) => {
           console.error(error);
