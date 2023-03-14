@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DisponibilidadForm from "@/components/form/DisponibilidadForm";
 import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
+import { useAlert } from "@/hooks/alertStore";
 
 const fetcherDisponibilidades: Fetcher<
   DispiniblidadesDeUnViveroInterface[],
@@ -34,6 +35,7 @@ const fetcherVivero: Fetcher<ViveroSimpleInterface, string> = (url: string) =>
   axios.get(url).then((res) => res.data);
 
 export default function VistaVivero() {
+  const lanzarAlerta = useAlert((state) => state.lanzarAlerta);
   const router = useRouter();
   const disponibilidadesDeUnVivero = useDisponibilidadStore(
     (state) => state.disponibilidadesDeUnVivero

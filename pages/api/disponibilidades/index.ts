@@ -30,14 +30,14 @@ const saveDisponibilidad = async (
   res: NextApiResponse
 ) => {
   try {
-    const { newDisponibilidad } = req.body;
-    // await prisma.viveroDisponibilidadEspecies.create({
-    //   data: { ...newDisponibilidad },
-    // });
+    const newDisponibilidad = req.body;
+    await prisma.viveroDisponibilidadEspecies.create({
+      data: { ...newDisponibilidad },
+    });
 
-    return res.status(200).json(newDisponibilidad);
     console.log("creating a new disponibilidad");
     console.log(req.body);
+    return res.status(200).json(newDisponibilidad);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "error en la api para guardar" });

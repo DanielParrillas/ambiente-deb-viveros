@@ -3,7 +3,16 @@ import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibili
 import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
 import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
 
-export const initialState = {
+export interface DisponibilidadStore {
+  id: "" | number;
+  fecha: "" | string;
+  disponibles: "" | number;
+  enProceso: "" | number;
+  especie: EspecieSimpleInterface | "";
+  vivero: ViveroSimpleInterface | "";
+}
+
+export const initialState: DisponibilidadStore = {
   id: "",
   fecha: "",
   disponibles: "",
@@ -11,15 +20,6 @@ export const initialState = {
   especie: "",
   vivero: "",
 };
-
-export interface DisponibilidadStore {
-  id: string | number;
-  fecha: string | Date | string;
-  disponibles: string | number;
-  enProceso: string | number;
-  especie: EspecieSimpleInterface | string;
-  vivero: ViveroSimpleInterface | string;
-}
 
 interface DisponibilidadState {
   disponibilidad: DisponibilidadStore;

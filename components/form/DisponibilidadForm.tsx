@@ -4,6 +4,9 @@ import { Prisma } from "@prisma/client";
 import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import axios from "axios";
+import { disponibilidadPOST } from "@/types";
+import { useAlert } from "@/hooks/alertStore";
 
 interface Disponibilidad
   extends Prisma.ViveroDisponibilidadEspeciesUpdateInput {
@@ -14,6 +17,8 @@ export default function DisponibilidadForm() {
   const disponibilidad = useDisponibilidadStore(
     (state) => state.disponibilidad
   );
+  const lanzarAlerta = useAlert((state) => state.lanzarAlerta);
+
   const setDisponibilidad = useDisponibilidadStore(
     (state) => state.setDisponibilidad
   );
@@ -26,13 +31,39 @@ export default function DisponibilidadForm() {
   }, []);
 
   //console.log(disponibilidad);
-  const handleSubmit = (
+  const handleSubmit = async (
     e:
       | React.FormEvent<HTMLFormElement>
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     console.log(disponibilidad);
+    if (
+      disponibilidad.disponibles !== "" &&
+      disponibilidad.enProceso !== "" &&
+      disponibilidad.especie !== "" &&
+      disponibilidad.vivero !== "" &&
+      disponibilidad.fecha !== ""
+    ) {
+      const data: disponibilidadPOST = {
+        disponibles: disponibilidad.disponibles,
+        enProceso: disponibilidad.enProceso,
+        fecha: disponibilidad.fecha,
+        especieId: disponibilidad.especie.id,
+        viveroId: disponibilidad.vivero.id,
+      };
+      const res = await axios
+        .post("/api/disponibilidades", data)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+          lanzarAlerta("No se pudo guardar el dato", { severity: "error" });
+        });
+    } else {
+      console.error("error en el formulario de disponibilidad");
+    }
   };
 
   return (

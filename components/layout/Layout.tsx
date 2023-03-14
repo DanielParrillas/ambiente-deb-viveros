@@ -3,6 +3,8 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 import SideBar from "./SideBar";
 import Slide from "@mui/material/Slide";
+import { Snackbar, Alert } from "@mui/material";
+import { useAlert } from "@/hooks/alertStore";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +13,14 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const sideBar = useSideBarStore();
   const cerrarSideBar = useSideBarStore((state) => state.cerrarSideBar);
+  const [open, setOpen] = useState(false);
+  const {
+    estaVisible: alerta,
+    cerrarAlerta,
+    mensaje: alertaMensaje,
+    props: alertProps,
+  } = useAlert((state) => state);
+
   return (
     <>
       <Navbar />
@@ -25,10 +35,21 @@ export default function Layout({ children }: LayoutProps) {
           if (sideBar.estaVisible === true) {
             cerrarSideBar();
           }
+          setOpen(true);
         }}
       >
         <div className="w-full h-full overflow-y-auto p-4">{children}</div>
       </main>
+      <Snackbar open={alerta} autoHideDuration={6000} onClose={cerrarAlerta}>
+        <Alert
+          onClose={cerrarAlerta}
+          severity="success"
+          sx={{ width: "100%" }}
+          {...alertProps}
+        >
+          {alertaMensaje}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 import { isUndefined } from "swr/_internal";
+import { useEffect, useState } from "react";
 
 interface EspecieAutoCompleteProps {
   className?: string;
@@ -34,12 +35,21 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
   const limpiarDatosDisponibilidad = useDisponibilidadStore(
     (state) => state.limpiarDatos
   );
-  const { data: especies, error: especiesError } = useSWR(
+  const { data: especiesData, error: especiesError } = useSWR(
     "/api/especies",
     fetcher
   );
-  if (especiesError) return <div></div>;
-  if (!especies) return <div>sdf</div>;
+  const [especies, setEspecies] = useState<EspecieSimpleInterface[]>([]);
+  useEffect(() => {
+    if (especiesError) {
+      setEspecies([]);
+      console.log("error api de especies");
+    }
+    if (!!especiesData) {
+      setEspecies(especiesData);
+      console.log("se cargaron las especies");
+    }
+  }, [especiesData, especiesError]);
 
   const onChange = (event: React.SyntheticEvent, value: any) => {
     //console.log(value);
@@ -100,7 +110,11 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
       // }
       onChange={onChange}
       renderInput={(params) => (
-        <TextField required {...params} label="Especie" />
+        <TextField
+          required
+          {...params}
+          label={especies.length === 0 ? "Especies..." : "Especies"}
+        />
       )}
       {...props}
     />
