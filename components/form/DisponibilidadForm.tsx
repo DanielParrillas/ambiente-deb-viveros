@@ -8,6 +8,15 @@ import axios from "axios";
 import { disponibilidadPOST } from "@/types";
 import { useAlert } from "@/hooks/alertStore";
 
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+
+import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
+
 interface Disponibilidad
   extends Prisma.ViveroDisponibilidadEspeciesUpdateInput {
   id: number;
@@ -17,14 +26,13 @@ export default function DisponibilidadForm() {
   const disponibilidad = useDisponibilidadStore(
     (state) => state.disponibilidad
   );
-  const lanzarAlerta = useAlert((state) => state.lanzarAlerta);
+  const { lanzarAlerta } = useAlert();
 
-  const setDisponibilidad = useDisponibilidadStore(
-    (state) => state.setDisponibilidad
-  );
-  const limpiarDatosDisponibilidad = useDisponibilidadStore(
-    (state) => state.limpiarDatos
-  );
+  const {
+    limpiarDatos: limpiarDatosDisponibilidad,
+    addTempDisponibilidadDeUnVivero,
+    setDisponibilidad,
+  } = useDisponibilidadStore();
 
   useEffect(() => {
     limpiarDatosDisponibilidad("vivero");
@@ -37,7 +45,7 @@ export default function DisponibilidadForm() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    console.log(disponibilidad);
+    //console.log(disponibilidad);
     if (
       disponibilidad.disponibles !== "" &&
       disponibilidad.enProceso !== "" &&
@@ -48,14 +56,19 @@ export default function DisponibilidadForm() {
       const data: disponibilidadPOST = {
         disponibles: disponibilidad.disponibles,
         enProceso: disponibilidad.enProceso,
-        fecha: disponibilidad.fecha,
+        fecha: dayjs(disponibilidad.fecha).utc(false).format(),
         especieId: disponibilidad.especie.id,
         viveroId: disponibilidad.vivero.id,
       };
+      console.log(data);
       const res = await axios
         .post("/api/disponibilidades", data)
         .then((response) => {
           console.log(response);
+          const temp: DispiniblidadesDeUnViveroInterface = response.data;
+          lanzarAlerta("Nueva disponibilidad creada", { severity: "success" });
+          addTempDisponibilidadDeUnVivero(temp);
+          limpiarDatosDisponibilidad("vivero");
         })
         .catch((error) => {
           console.error(error);
@@ -109,7 +122,7 @@ export default function DisponibilidadForm() {
           className="w-full"
         />
       </div>
-      <div className="basis-1/3 lg:basis-1/6 p-2">
+      {/* <div className="basis-1/3 lg:basis-1/6 p-2">
         <TextField
           id="fecha-disponibilidad"
           label="Fecha"
@@ -129,12 +142,26 @@ export default function DisponibilidadForm() {
           required
           className="w-full"
         />
+      </div> */}
+      <div className="basis-1/3 lg:basis-1/6 p-2">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <MobileDateTimePicker
+            label="Fecha"
+            value={dayjs(disponibilidad.fecha)}
+            onChange={(value) => {
+              setDisponibilidad({
+                ...disponibilidad,
+                fecha: value === null ? "" : dayjs(value),
+              });
+            }}
+          />
+        </LocalizationProvider>
       </div>
       <div className="flex mt-5 items-center md:basis-full justify-around md:justify-end md:pr-2 md:gap-8">
         <Button
           type="submit"
           variant="contained"
-          color="primary"
+          color="success"
           className="normal-case"
         >
           {disponibilidad.id === "" ? "Guardar" : "Actualizar"}

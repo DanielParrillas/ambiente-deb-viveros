@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 import {
   defaultQuery,
+  queryDeUnVivero,
   queryPorEspecie,
   queryPorVivero,
 } from "@/prisma/queries/disponibilidadesQueries";
@@ -31,13 +32,16 @@ const saveDisponibilidad = async (
 ) => {
   try {
     const newDisponibilidad = req.body;
-    await prisma.viveroDisponibilidadEspecies.create({
+    const asdf = await prisma.viveroDisponibilidadEspecies.create({
       data: { ...newDisponibilidad },
+      select: { ...queryDeUnVivero.select },
     });
 
     console.log("creating a new disponibilidad");
     console.log(req.body);
-    return res.status(200).json(newDisponibilidad);
+    console.log(asdf);
+
+    return res.status(200).json(asdf);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "error en la api para guardar" });

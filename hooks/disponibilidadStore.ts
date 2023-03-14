@@ -31,6 +31,9 @@ interface DisponibilidadState {
   setDisponibilidadDeunVivero: (
     data: DispiniblidadesDeUnViveroInterface[]
   ) => void;
+  addTempDisponibilidadDeUnVivero: (
+    temp: DispiniblidadesDeUnViveroInterface
+  ) => void;
 }
 
 export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
@@ -62,8 +65,11 @@ export const useDisponibilidadStore = create<DisponibilidadState>()((set) => ({
   },
   setDisponibilidad: (data) =>
     set((state) => ({ disponibilidad: { ...data } })),
-  guardarDisponibilidad: (data: any) =>
-    set((state) => ({ disponibilidad: data })),
+  guardarDisponibilidad: (data) => set((state) => ({ disponibilidad: data })),
   setDisponibilidadDeunVivero: (data: DispiniblidadesDeUnViveroInterface[]) =>
     set((state) => ({ disponibilidadesDeUnVivero: data })),
+  addTempDisponibilidadDeUnVivero: (temp) =>
+    set((state) => ({
+      disponibilidadesDeUnVivero: [...state.disponibilidadesDeUnVivero, temp],
+    })),
 }));

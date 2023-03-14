@@ -202,9 +202,7 @@ export default function VistaVivero() {
                 <TableCell>{disponibilidadItem.especie.comun}</TableCell>
                 <TableCell>{disponibilidadItem.especie.cientifico}</TableCell>
                 <TableCell align="right">
-                  {dayjs
-                    .tz(String(disponibilidadItem.fecha), "UTC")
-                    .format("LL")}
+                  {dayjs(disponibilidadItem.fecha).format("LLL")}
                 </TableCell>
                 <TableCell align="right">
                   {disponibilidadItem.enProceso}
