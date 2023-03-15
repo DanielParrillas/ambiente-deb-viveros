@@ -19,7 +19,7 @@ export default function DisponibilidadForm() {
     guardarDisponibilidad,
     deleteDisponibilidad,
     getDisponibilidadesDeunVivero,
-    limpiarDatos,
+    limpiarDisponibilidad,
   } = useDisponibilidadStore();
 
   const { lanzarAlerta } = useAlert();
@@ -50,7 +50,7 @@ export default function DisponibilidadForm() {
           console.log(estado.error);
         }
       } else {
-        limpiarDatos("vivero");
+        limpiarDisponibilidad("vivero");
         if (router.query.id !== undefined) {
           getDisponibilidadesDeunVivero(router.query.id);
         }
@@ -60,7 +60,7 @@ export default function DisponibilidadForm() {
 
   const handleDelete = async () => {
     await deleteDisponibilidad().then((response) => {
-      limpiarDatos("vivero");
+      limpiarDisponibilidad("vivero");
       if (router.query.id !== undefined) {
         getDisponibilidadesDeunVivero(router.query.id);
       }
@@ -132,7 +132,7 @@ export default function DisponibilidadForm() {
           color="success"
           className="normal-case"
         >
-          {disponibilidad.id === "" ? "Guardar" : "Actualizar"}
+          {disponibilidad.id === "" ? "Guardar" : "Guardar cambios"}
         </Button>
         {disponibilidad.id !== "" ? (
           <Button

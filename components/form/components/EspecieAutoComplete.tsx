@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 interface EspecieAutoCompleteProps {
   className?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const fetcher: Fetcher<EspecieSimpleInterface[], string> = (url: string) =>
@@ -33,7 +34,7 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
     (state) => state.setDisponibilidad
   );
   const limpiarDatosDisponibilidad = useDisponibilidadStore(
-    (state) => state.limpiarDatos
+    (state) => state.limpiarDisponibilidad
   );
   const { data: especiesData, error: especiesError } = useSWR(
     "/api/especies",
@@ -52,7 +53,6 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
   }, [especiesData, especiesError]);
 
   const onChange = (event: React.SyntheticEvent, value: any) => {
-    //console.log(value);
     if (value !== null) {
       const encontrado = disponibilidadesDeUnVivero.find(
         (disponibilidad) => disponibilidad.especie.id === value.especie.id
@@ -66,9 +66,7 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
           especie: encontrado.especie,
           fecha: encontrado.fecha,
         });
-        //console.log("encontrado");
       } else {
-        //console.log("no encontrado");
         limpiarDatosDisponibilidad("vivero");
         setDisponibilidad({
           ...disponibilidad,
@@ -77,8 +75,6 @@ export default function EspecieAutoComplete(props: EspecieAutoCompleteProps) {
         });
       }
     } else {
-      //console.log("safd");
-
       setDisponibilidad({
         ...disponibilidad,
         especie: "",

@@ -31,8 +31,7 @@ export const initialState: DisponibilidadStore = {
 interface DisponibilidadState {
   disponibilidad: DisponibilidadStore;
   disponibilidadesDeUnVivero: DispiniblidadesDeUnViveroInterface[];
-  // limpiarDatos: (mantener?: "vivero" | "especie") => void;
-  limpiarDatos: (mantener: "vivero" | "especie" | "nada") => void;
+  limpiarDisponibilidad: (mantener: "vivero" | "especie" | "nada") => void;
   setDisponibilidad: (data: DisponibilidadStore) => void;
   guardarDisponibilidad: () => Promise<EstadoPeticionError | EstadoPeticionOk>;
   setDisponibilidadDeunVivero: (
@@ -48,7 +47,7 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
   (set, get) => ({
     disponibilidad: initialState,
     disponibilidadesDeUnVivero: [],
-    limpiarDatos: (mantener) => {
+    limpiarDisponibilidad: (mantener) => {
       switch (mantener) {
         case "especie":
           set((state) => ({

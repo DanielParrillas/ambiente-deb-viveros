@@ -38,7 +38,7 @@ export default function VistaVivero() {
   const {
     getDisponibilidadesDeunVivero,
     setDisponibilidad,
-    limpiarDatos: limpiarDisponilidad,
+    limpiarDisponibilidad,
   } = useDisponibilidadStore();
 
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -54,7 +54,7 @@ export default function VistaVivero() {
     };
 
   useEffect(() => {
-    limpiarDisponilidad("nada");
+    limpiarDisponibilidad("nada");
     if (router.query.id !== undefined) {
       getVivero();
       getDisponibilidadesDeunVivero(router.query.id).then((estado) => {
@@ -78,7 +78,7 @@ export default function VistaVivero() {
       .then(({ data }) => {
         setVivero(data);
         setDisponibilidad({ ...disponibilidad, vivero: data });
-        limpiarDisponilidad("vivero");
+        limpiarDisponibilidad("vivero");
         //? console.log(data);
       })
       .catch((error) => {
@@ -107,11 +107,11 @@ export default function VistaVivero() {
       }
     } else {
       if (rowSelected === disponibilidadSeleccionada.id) {
-        limpiarDisponilidad("vivero");
+        limpiarDisponibilidad("vivero");
         setRowSelected(false);
         setExpanded(false);
       } else {
-        limpiarDisponilidad("vivero");
+        limpiarDisponibilidad("vivero");
         setExpanded(false);
         setRowSelected(disponibilidadSeleccionada.id);
       }
@@ -121,7 +121,7 @@ export default function VistaVivero() {
   const handleClickAdd = () => {
     setRowSelected(false);
     setExpanded("panel-vivero");
-    limpiarDisponilidad("vivero");
+    limpiarDisponibilidad("vivero");
   };
 
   return (
@@ -146,7 +146,7 @@ export default function VistaVivero() {
           }
           aria-controls="panel-datos-personales"
           id="panel-datos-personales"
-          onClick={() => limpiarDisponilidad("vivero")}
+          onClick={() => limpiarDisponibilidad("vivero")}
           className="flex justify-between"
         >
           <Typography>Vivero {!vivero ? "..." : vivero.nombre}</Typography>
