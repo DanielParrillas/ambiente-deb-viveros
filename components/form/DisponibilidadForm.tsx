@@ -12,20 +12,19 @@ import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import { AxiosError } from "axios";
 
 export default function DisponibilidadForm() {
-  const disponibilidad = useDisponibilidadStore(
-    (state) => state.disponibilidad
-  );
   const {
     guardarDisponibilidad,
     deleteDisponibilidad,
     getDisponibilidadesDeunVivero,
     limpiarDisponibilidad,
+    setDisponibilidad,
+    setDisponibilidadForm,
+    disponibilidad,
+    disponibilidadForm,
   } = useDisponibilidadStore();
 
   const { lanzarAlerta } = useAlert();
   const router = useRouter();
-
-  const { setDisponibilidad } = useDisponibilidadStore();
 
   const handleSubmit = async (
     e:
@@ -33,6 +32,8 @@ export default function DisponibilidadForm() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    lanzarAlerta("Guardando disponibilidad", { severity: "info" });
+    setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: true });
     guardarDisponibilidad().then((estado) => {
       if (estado.ok === false) {
         if (estado.error instanceof AxiosError) {
@@ -50,7 +51,9 @@ export default function DisponibilidadForm() {
           console.log(estado.error);
         }
       } else {
+        lanzarAlerta("Disponibilidad guardada", { severity: "success" });
         limpiarDisponibilidad("vivero");
+        setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: false });
         if (router.query.id !== undefined) {
           getDisponibilidadesDeunVivero(router.query.id);
         }
@@ -59,8 +62,12 @@ export default function DisponibilidadForm() {
   };
 
   const handleDelete = async () => {
+    lanzarAlerta("Eliminando disponibilidad", { severity: "info" });
+    setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: true });
     await deleteDisponibilidad().then((response) => {
+      lanzarAlerta("Disponibilidad eliminada", { severity: "success" });
       limpiarDisponibilidad("vivero");
+      setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: false });
       if (router.query.id !== undefined) {
         getDisponibilidadesDeunVivero(router.query.id);
       }
@@ -72,10 +79,13 @@ export default function DisponibilidadForm() {
       className="flex flex-col md:flex-row md:flex-wrap "
       onSubmit={handleSubmit}
     >
-      <div className="basis-full lg:basis-3/6 p-2">
-        <EspecieAutoComplete required />
+      <div className="basis-full xl:basis-3/6 p-2">
+        <EspecieAutoComplete
+          required
+          disabled={disponibilidadForm.deshabilitado}
+        />
       </div>
-      <div className="basis-1/3 lg:basis-1/6 p-2">
+      <div className="basis-1/3 xl:basis-1/6 p-2">
         <TextField
           id="en-proceso"
           label="En proceso"
@@ -89,10 +99,11 @@ export default function DisponibilidadForm() {
               enProceso: e.target.value !== "" ? parseInt(e.target.value) : "",
             });
           }}
+          disabled={disponibilidadForm.deshabilitado}
           className="w-full"
         />
       </div>
-      <div className="basis-1/3 lg:basis-1/6 p-2">
+      <div className="basis-1/3 xl:basis-1/6 p-2">
         <TextField
           id="disponibles-input"
           label="Disponibles"
@@ -107,10 +118,11 @@ export default function DisponibilidadForm() {
                 e.target.value !== "" ? parseInt(e.target.value) : "",
             });
           }}
+          disabled={disponibilidadForm.deshabilitado}
           className="w-full"
         />
       </div>
-      <div className="basis-1/3 lg:basis-1/6 p-2">
+      <div className="basis-1/3 xl:basis-1/6 p-2">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MobileDateTimePicker
             className="w-full"
@@ -122,6 +134,7 @@ export default function DisponibilidadForm() {
                 fecha: value === null ? "" : dayjs(value),
               });
             }}
+            disabled={disponibilidadForm.deshabilitado}
           />
         </LocalizationProvider>
       </div>
@@ -130,6 +143,7 @@ export default function DisponibilidadForm() {
           type="submit"
           variant="contained"
           color="success"
+          disabled={disponibilidadForm.deshabilitado}
           className="normal-case"
         >
           {disponibilidad.id === "" ? "Guardar" : "Guardar cambios"}
@@ -139,6 +153,7 @@ export default function DisponibilidadForm() {
             variant="contained"
             color="error"
             onClick={handleDelete}
+            disabled={disponibilidadForm.deshabilitado}
             className="normal-case"
           >
             Eliminar

@@ -11,7 +11,17 @@ import {
   DisponibilidadPUT,
 } from "@/types";
 
-export interface DisponibilidadStore {
+interface DisponibilidadForm {
+  visible: boolean;
+  deshabilitado: boolean;
+}
+
+const initialDisponibilidadForm: DisponibilidadForm = {
+  visible: true,
+  deshabilitado: false,
+};
+
+interface DisponibilidadStore {
   id: "" | number;
   fecha: "" | string | Date | Dayjs;
   disponibles: "" | number;
@@ -19,7 +29,7 @@ export interface DisponibilidadStore {
   especie: EspecieSimpleInterface | "";
   vivero: ViveroSimpleInterface | "";
 }
-export const initialState: DisponibilidadStore = {
+const initialDisponibilidad: DisponibilidadStore = {
   id: "",
   fecha: "",
   disponibles: "",
@@ -31,6 +41,8 @@ export const initialState: DisponibilidadStore = {
 interface DisponibilidadState {
   disponibilidad: DisponibilidadStore;
   disponibilidadesDeUnVivero: DispiniblidadesDeUnViveroInterface[];
+  disponibilidadForm: DisponibilidadForm;
+  setDisponibilidadForm: (data: DisponibilidadForm) => void;
   limpiarDisponibilidad: (mantener: "vivero" | "especie" | "nada") => void;
   setDisponibilidad: (data: DisponibilidadStore) => void;
   guardarDisponibilidad: () => Promise<EstadoPeticionError | EstadoPeticionOk>;
@@ -45,14 +57,17 @@ interface DisponibilidadState {
 
 export const useDisponibilidadStore = create<DisponibilidadState>()(
   (set, get) => ({
-    disponibilidad: initialState,
+    disponibilidad: initialDisponibilidad,
+    disponibilidadForm: initialDisponibilidadForm,
+    setDisponibilidadForm: (data) =>
+      set((state) => ({ disponibilidadForm: { ...data } })),
     disponibilidadesDeUnVivero: [],
     limpiarDisponibilidad: (mantener) => {
       switch (mantener) {
         case "especie":
           set((state) => ({
             disponibilidad: {
-              ...initialState,
+              ...initialDisponibilidad,
               especie: state.disponibilidad.especie,
             },
           }));
@@ -60,14 +75,14 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
         case "vivero":
           set((state) => ({
             disponibilidad: {
-              ...initialState,
+              ...initialDisponibilidad,
               vivero: state.disponibilidad.vivero,
             },
           }));
           break;
 
         case "nada":
-          set((state) => ({ disponibilidad: initialState }));
+          set((state) => ({ disponibilidad: initialDisponibilidad }));
           break;
       }
     },
