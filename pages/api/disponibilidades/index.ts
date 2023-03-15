@@ -32,19 +32,19 @@ const saveDisponibilidad = async (
 ) => {
   try {
     const newDisponibilidad = req.body;
-    const asdf = await prisma.viveroDisponibilidadEspecies.create({
-      data: { ...newDisponibilidad },
-      select: { ...queryDeUnVivero.select },
-    });
+    // const asdf = await prisma.viveroDisponibilidadEspecies.create({
+    //   data: { ...newDisponibilidad },
+    //   select: { ...queryDeUnVivero.select },
+    // });
 
     console.log("creating a new disponibilidad");
-    console.log(req.body);
-    console.log(asdf);
+    console.log(newDisponibilidad);
 
-    return res.status(200).json(asdf);
+    return res.status(200).json(newDisponibilidad);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "error en la api para guardar" });
+    let errorMessage = "Error en la api para guardar disponibilidades";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
   }
 };
 
@@ -58,10 +58,9 @@ const getDisponibilidades = async (
     );
     res.json(disponibilidades);
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "error en la api de disponibilidades default" });
+    let errorMessage = "Error en la api de disponibilidades default";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
   }
 };
 
@@ -73,10 +72,10 @@ const getDisponibilidadesPorVivero = async (
     const disponibilidades = await prisma.vivero.findMany(queryPorVivero);
     res.json(disponibilidades);
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "error en la api de disponibilidades por vivero" });
+    let errorMessage =
+      "Error en la api para obtener disponibilidades por vivero";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
   }
 };
 
@@ -90,9 +89,9 @@ const getDisponibilidadesPorEspecie = async (
     );
     res.json(disponibilidades);
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "error en la api de disponibilidades por especie" });
+    let errorMessage =
+      "Error en la api para obtener disponibilidades por especie";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
   }
 };

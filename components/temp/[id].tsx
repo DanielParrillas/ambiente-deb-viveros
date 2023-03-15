@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import useSWR, { Fetcher } from "swr";
 import { DispiniblidadesDeUnViveroInterface } from "@/prisma/queries/disponibilidadesQueries";
 import axios from "axios";
-import dayjs from "dayjs";
+import dayjs from "dayjs"; //?
 import "dayjs/locale/es-mx";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,6 +26,14 @@ import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 import { ViveroSimpleInterface } from "@/prisma/queries/viverosQueries";
 import { useAlert } from "@/hooks/alertStore";
 
+const fetcherDisponibilidades: Fetcher<
+  DispiniblidadesDeUnViveroInterface[],
+  string
+> = (url: string) => axios.get(url).then((res) => res.data);
+
+const fetcherVivero: Fetcher<ViveroSimpleInterface, string> = (url: string) =>
+  axios.get(url).then((res) => res.data);
+
 export default function VistaVivero() {
   const lanzarAlerta = useAlert((state) => state.lanzarAlerta);
   const router = useRouter();
@@ -36,11 +45,20 @@ export default function VistaVivero() {
   );
 
   const {
-    getDisponibilidadesDeunVivero,
+    actualizarDisponibilidadesDeunVivero,
     setDisponibilidad,
+    setDisponibilidadDeunVivero,
     limpiarDatos: limpiarDisponilidad,
   } = useDisponibilidadStore();
 
+  const { data: viveroData, error: errorVivero } = useSWR(
+    `/api/viveros/${router.query.id}`,
+    fetcherVivero
+  );
+  const { data: disponibilidades, error: errorDisponibilidades } = useSWR(
+    `/api/disponibilidades/${router.query.id}`,
+    fetcherDisponibilidades
+  );
   const [expanded, setExpanded] = useState<string | false>(false);
   const [rowSelected, setRowSelected] = useState<number | false>(false);
 
@@ -53,24 +71,24 @@ export default function VistaVivero() {
       }
     };
 
+  // useEffect(() => {
+  //   if (router.query.id !== undefined) {
+  //     limpiarDisponilidad("nada");
+  //     getDisponibilidadesDeUnVivero();
+  //     getVivero();
+  //   }
+  // }, [router.query.id]);
+
   useEffect(() => {
     limpiarDisponilidad("nada");
-    if (router.query.id !== undefined) {
-      getVivero();
-      getDisponibilidadesDeunVivero(router.query.id).then((estado) => {
-        if (estado.ok === false) {
-          if (estado.error instanceof Error) {
-            lanzarAlerta(estado.error.message, { severity: "error" });
-          } else {
-            lanzarAlerta("revisar consola, error desconocido", {
-              severity: "error",
-            });
-            console.log(estado.error);
-          }
-        }
-      });
+    if (!!viveroData) {
+      setVivero(viveroData);
+      setDisponibilidad({ ...disponibilidad, vivero: viveroData });
     }
-  }, [router.query.id]);
+    if (errorVivero) {
+      console.log("error en la api de vivero");
+    }
+  }, [viveroData]);
 
   const getVivero = async () => {
     await axios
@@ -78,11 +96,25 @@ export default function VistaVivero() {
       .then(({ data }) => {
         setVivero(data);
         setDisponibilidad({ ...disponibilidad, vivero: data });
-        limpiarDisponilidad("vivero");
         console.log(data);
       })
       .catch((error) => {
         lanzarAlerta("No se pudo recuperar vivero", { severity: "error" });
+      });
+  };
+
+  const getDisponibilidadesDeUnVivero = async () => {
+    await axios
+      .get(`/api/disponibilidades/${router.query.id}`)
+      .then(({ data }) => {
+        setDisponibilidadDeunVivero(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        lanzarAlerta("No se pudieron recuperar las disponibilidades", {
+          severity: "error",
+        });
+        console.log(error);
       });
   };
 

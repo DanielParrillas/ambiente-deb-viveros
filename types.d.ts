@@ -3,7 +3,7 @@ import { ViveroDisponibilidadEspecies } from "@prisma/client";
 interface Disponibilidad
   extends Omit<ViveroDisponibilidadEspecies, "viveroId" | "especieId"> {}
 
-export interface disponibilidadPOST {
+export interface DisponibilidadPOST {
   especieId: number;
   viveroId: number;
   fecha: string;
@@ -11,6 +11,14 @@ export interface disponibilidadPOST {
   disponibles: number;
 }
 
-export interface disponibilidadPUT extends disponibilidadPOST {
+export interface DisponibilidadPUT extends disponibilidadPOST {
   id: number;
+}
+
+export interface EstadoPeticionError {
+  ok: false;
+  error: Error;
+}
+export interface EstadoPeticionOk {
+  ok: true;
 }
