@@ -32,10 +32,10 @@ const saveDisponibilidad = async (
 ) => {
   try {
     const newDisponibilidad = req.body;
-    // const asdf = await prisma.viveroDisponibilidadEspecies.create({
-    //   data: { ...newDisponibilidad },
-    //   select: { ...queryDeUnVivero.select },
-    // });
+    await prisma.viveroDisponibilidadEspecies.create({
+      data: { ...newDisponibilidad },
+      select: { ...queryDeUnVivero.select },
+    });
 
     console.log("creating a new disponibilidad");
     console.log(newDisponibilidad);

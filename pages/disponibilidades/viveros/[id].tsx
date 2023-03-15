@@ -79,7 +79,7 @@ export default function VistaVivero() {
         setVivero(data);
         setDisponibilidad({ ...disponibilidad, vivero: data });
         limpiarDisponilidad("vivero");
-        console.log(data);
+        //? console.log(data);
       })
       .catch((error) => {
         lanzarAlerta("No se pudo recuperar vivero", { severity: "error" });

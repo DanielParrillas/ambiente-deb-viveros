@@ -39,8 +39,9 @@ interface DisponibilidadState {
     data: DispiniblidadesDeUnViveroInterface[]
   ) => void;
   getDisponibilidadesDeunVivero: (
-    viveroId: string | string[] | undefined
+    viveroId: string | string[]
   ) => Promise<EstadoPeticionError | EstadoPeticionOk>;
+  deleteDisponibilidad: () => Promise<EstadoPeticionError | EstadoPeticionOk>;
 }
 
 export const useDisponibilidadStore = create<DisponibilidadState>()(
@@ -73,10 +74,32 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
     },
     setDisponibilidad: (data) =>
       set((state) => ({ disponibilidad: { ...data } })),
-    guardarDisponibilidad: async () => {
-      let estado: EstadoPeticionError | EstadoPeticionOk = { ok: true };
-      const disponibilidad = get().disponibilidad;
+    setDisponibilidadDeunVivero: (data: DispiniblidadesDeUnViveroInterface[]) =>
+      set((state) => ({ disponibilidadesDeUnVivero: data })),
+    getDisponibilidadesDeunVivero: async (viveroId) => {
+      let estado: EstadoPeticionError | EstadoPeticionOk = {
+        ok: true,
+        mensaje: "...",
+      };
 
+      await axios
+        .get(`/api/disponibilidades/${viveroId}`)
+        .then(({ data }) =>
+          set((state) => ({ disponibilidadesDeUnVivero: data }))
+        )
+        .catch((error) => {
+          console.log(error);
+          estado = { ok: false, error: error };
+        });
+
+      return estado;
+    },
+    guardarDisponibilidad: async () => {
+      let estado: EstadoPeticionError | EstadoPeticionOk = {
+        ok: true,
+        mensaje: "...",
+      };
+      const disponibilidad = get().disponibilidad;
       if (
         disponibilidad.disponibles !== "" &&
         disponibilidad.enProceso !== "" &&
@@ -103,7 +126,6 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
               estado = { ok: false, error: error };
             });
         } else {
-          data = { ...data, id: disponibilidad.id };
           await axios
             .put(`/api/disponibilidades/${disponibilidad.id}`, data)
             .then((response) => {
@@ -121,20 +143,21 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
 
       return estado;
     },
-    setDisponibilidadDeunVivero: (data: DispiniblidadesDeUnViveroInterface[]) =>
-      set((state) => ({ disponibilidadesDeUnVivero: data })),
-    getDisponibilidadesDeunVivero: async (viveroId) => {
-      let estado: EstadoPeticionError | EstadoPeticionOk = { ok: true };
+    deleteDisponibilidad: async () => {
+      let estado: EstadoPeticionError | EstadoPeticionOk = {
+        ok: true,
+        mensaje: "",
+      };
+      const disponibilidad = get().disponibilidad;
 
-      await axios
-        .get(`/api/disponibilidades/${viveroId}`)
-        .then(({ data }) =>
-          set((state) => ({ disponibilidadesDeUnVivero: data }))
-        )
-        .catch((error) => {
-          console.log(error);
-          estado = { ok: false, error: error };
-        });
+      if (typeof disponibilidad.id !== "string") {
+        await axios
+          .delete(`/api/disponibilidades/${disponibilidad.id}`)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => console.log(error.message));
+      }
 
       return estado;
     },

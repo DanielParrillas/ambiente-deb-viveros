@@ -2,8 +2,8 @@ import EspecieAutoComplete from "./components/EspecieAutoComplete";
 import { TextField, Button } from "@mui/material";
 import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
 import dayjs from "dayjs";
-import { DisponibilidadPOST } from "@/types";
 import { useAlert } from "@/hooks/alertStore";
+import { useRouter } from "next/router";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -15,9 +15,15 @@ export default function DisponibilidadForm() {
   const disponibilidad = useDisponibilidadStore(
     (state) => state.disponibilidad
   );
-  const { guardarDisponibilidad } = useDisponibilidadStore();
+  const {
+    guardarDisponibilidad,
+    deleteDisponibilidad,
+    getDisponibilidadesDeunVivero,
+    limpiarDatos,
+  } = useDisponibilidadStore();
 
   const { lanzarAlerta } = useAlert();
+  const router = useRouter();
 
   const { setDisponibilidad } = useDisponibilidadStore();
 
@@ -43,13 +49,27 @@ export default function DisponibilidadForm() {
           });
           console.log(estado.error);
         }
+      } else {
+        limpiarDatos("vivero");
+        if (router.query.id !== undefined) {
+          getDisponibilidadesDeunVivero(router.query.id);
+        }
+      }
+    });
+  };
+
+  const handleDelete = async () => {
+    await deleteDisponibilidad().then((response) => {
+      limpiarDatos("vivero");
+      if (router.query.id !== undefined) {
+        getDisponibilidadesDeunVivero(router.query.id);
       }
     });
   };
 
   return (
     <form
-      className="flex flex-col md:flex-row md:flex-wrap"
+      className="flex flex-col md:flex-row md:flex-wrap "
       onSubmit={handleSubmit}
     >
       <div className="basis-full lg:basis-3/6 p-2">
@@ -115,7 +135,12 @@ export default function DisponibilidadForm() {
           {disponibilidad.id === "" ? "Guardar" : "Actualizar"}
         </Button>
         {disponibilidad.id !== "" ? (
-          <Button variant="contained" color="error" className="normal-case">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDelete}
+            className="normal-case"
+          >
             Eliminar
           </Button>
         ) : (

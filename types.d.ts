@@ -11,9 +11,7 @@ export interface DisponibilidadPOST {
   disponibles: number;
 }
 
-export interface DisponibilidadPUT extends disponibilidadPOST {
-  id: number;
-}
+export interface DisponibilidadPUT extends disponibilidadPOST {}
 
 export interface EstadoPeticionError {
   ok: false;
@@ -21,4 +19,5 @@ export interface EstadoPeticionError {
 }
 export interface EstadoPeticionOk {
   ok: true;
+  mensaje: string;
 }

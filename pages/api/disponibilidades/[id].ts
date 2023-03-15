@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 import { queryDeUnVivero } from "@/prisma/queries/disponibilidadesQueries";
+import { DisponibilidadPUT } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,18 +18,48 @@ export default async function handler(
   }
 }
 
-const deleteDisponibilidad = (req: NextApiRequest, res: NextApiResponse) => {};
+const deleteDisponibilidad = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  try {
+    const { id: disponibilidadId } = req.query;
+    await prisma.viveroDisponibilidadEspecies.delete({
+      where: { id: parseInt(disponibilidadId as string) },
+    });
+
+    console.log("deleting a new disponibilidad");
+    console.log(disponibilidadId);
+
+    return res.status(200).json(`Se elimino la disponibilidad`);
+  } catch (error) {
+    let errorMessage = "Error en la api para eliminar disponibilidades";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
 const updateDisponibilidad = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const disponibilidad = req.body;
+  try {
+    const { id: disponibilidadId } = req.query;
+    const disponibilidad: DisponibilidadPUT = req.body;
+    await prisma.viveroDisponibilidadEspecies.update({
+      where: { id: parseInt(disponibilidadId as string) },
+      data: { ...disponibilidad },
+    });
 
-  // const disponibilidad = await prisma.viveroDisponibilidadEspecies.updateMany(
-  //   {}
-  // );
-  console.log(disponibilidad);
-  return res.status(200).json(disponibilidad);
+    console.log("creating a new disponibilidad");
+    console.log(disponibilidad);
+
+    return res.status(200).json(disponibilidad);
+  } catch (error) {
+    let errorMessage = "Error en la api para guardar disponibilidades";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ message: errorMessage });
+  }
 };
 
 const getDisponibilidad = async (req: NextApiRequest, res: NextApiResponse) => {
