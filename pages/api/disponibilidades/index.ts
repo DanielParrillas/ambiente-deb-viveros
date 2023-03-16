@@ -53,9 +53,12 @@ const getDisponibilidades = async (
   res: NextApiResponse
 ) => {
   try {
+    console.log("obteniendo disponibilidades...");
+
     const disponibilidades = await prisma.viveroDisponibilidadEspecies.findMany(
       defaultQuery
     );
+    console.log("disponibilidades obtenidas");
     res.json(disponibilidades);
   } catch (error) {
     let errorMessage = "Error en la api de disponibilidades default";
