@@ -129,6 +129,7 @@ export default function DisponibilidadForm() {
             label="Fecha"
             value={dayjs(disponibilidad.fecha)}
             onChange={(value) => {
+              //console.log(dayjs(value).format("YYYY-MM-DDTHH:mm:ssZ"));
               setDisponibilidad({
                 ...disponibilidad,
                 fecha: value === null ? "" : dayjs(value),

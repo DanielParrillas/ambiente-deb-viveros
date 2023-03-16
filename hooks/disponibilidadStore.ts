@@ -85,6 +85,9 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
           set((state) => ({ disponibilidad: initialDisponibilidad }));
           break;
       }
+      set((state) => ({
+        disponibilidadForm: { deshabilitado: false, visible: true },
+      }));
     },
     setDisponibilidad: (data) =>
       set((state) => ({ disponibilidad: { ...data } })),
@@ -124,7 +127,9 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
         let data: DisponibilidadPOST | DisponibilidadPUT = {
           disponibles: disponibilidad.disponibles,
           enProceso: disponibilidad.enProceso,
-          fecha: dayjs(disponibilidad.fecha).utc(false).format(),
+          fecha: dayjs(disponibilidad.fecha)
+            .utc(false)
+            .format("YYYY-MM-DDTHH:mm:ssZ"),
           especieId: disponibilidad.especie.id,
           viveroId: disponibilidad.vivero.id,
         };
