@@ -14,7 +14,7 @@ import { AxiosError } from "axios";
 export default function DisponibilidadForm() {
   const {
     guardarDisponibilidad,
-    deleteDisponibilidad,
+    borrarDisponibilidad,
     getDisponibilidadesDeunVivero,
     limpiarDisponibilidad,
     setDisponibilidad,
@@ -64,7 +64,7 @@ export default function DisponibilidadForm() {
   const handleDelete = async () => {
     lanzarAlerta("Eliminando disponibilidad", { severity: "info" });
     setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: true });
-    await deleteDisponibilidad().then((response) => {
+    await borrarDisponibilidad().then((response) => {
       lanzarAlerta("Disponibilidad eliminada", { severity: "success" });
       limpiarDisponibilidad("vivero");
       setDisponibilidadForm({ ...disponibilidadForm, deshabilitado: false });

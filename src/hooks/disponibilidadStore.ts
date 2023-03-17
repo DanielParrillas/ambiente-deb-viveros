@@ -10,6 +10,11 @@ import {
   DisponibilidadPOST,
   DisponibilidadPUT,
 } from "@/types";
+import {
+  deleteDisponibilidad,
+  postDisponibilidad,
+  putDisponibilidad,
+} from "@/src/services/disponibilidad";
 
 interface DisponibilidadForm {
   visible: boolean;
@@ -52,7 +57,7 @@ interface DisponibilidadState {
   getDisponibilidadesDeunVivero: (
     viveroId: string | string[]
   ) => Promise<EstadoPeticionError | EstadoPeticionOk>;
-  deleteDisponibilidad: () => Promise<EstadoPeticionError | EstadoPeticionOk>;
+  borrarDisponibilidad: () => Promise<EstadoPeticionError | EstadoPeticionOk>;
 }
 
 export const useDisponibilidadStore = create<DisponibilidadState>()(
@@ -112,10 +117,6 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
       return estado;
     },
     guardarDisponibilidad: async () => {
-      let estado: EstadoPeticionError | EstadoPeticionOk = {
-        ok: true,
-        mensaje: "...",
-      };
       const disponibilidad = get().disponibilidad;
       if (
         disponibilidad.disponibles !== "" &&
@@ -134,51 +135,20 @@ export const useDisponibilidadStore = create<DisponibilidadState>()(
           viveroId: disponibilidad.vivero.id,
         };
         if (disponibilidad.id === "") {
-          await axios
-            .post(`/api/disponibilidades`, data)
-            .then((response) => {
-              console.log("nuevo");
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-              estado = { ok: false, error: error };
-            });
+          return postDisponibilidad(data);
         } else {
-          await axios
-            .put(`/api/disponibilidades/${disponibilidad.id}`, data)
-            .then((response) => {
-              console.log("actualizacion");
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-              estado = { ok: false, error: error };
-            });
+          return putDisponibilidad(disponibilidad.id, data);
         }
       } else {
-        console.warn("mmm");
+        return {
+          ok: false,
+          error: new Error("Los datos de la disponibilidad son incompatibles"),
+        };
       }
-
-      return estado;
     },
-    deleteDisponibilidad: async () => {
-      let estado: EstadoPeticionError | EstadoPeticionOk = {
-        ok: true,
-        mensaje: "",
-      };
+    borrarDisponibilidad: async () => {
       const disponibilidad = get().disponibilidad;
-
-      if (typeof disponibilidad.id !== "string") {
-        await axios
-          .delete(`/api/disponibilidades/${disponibilidad.id}`)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => console.log(error.message));
-      }
-
-      return estado;
+      return deleteDisponibilidad(disponibilidad.id);
     },
   })
 );
