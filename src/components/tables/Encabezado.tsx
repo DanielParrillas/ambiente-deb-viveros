@@ -5,7 +5,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import { visuallyHidden } from "@mui/utils";
 
-import { Order } from "@/lib/tableUtils";
+import { Order } from "@/src/utils/tableUtils";
 
 export interface HeadCell {
   disablePadding: boolean;

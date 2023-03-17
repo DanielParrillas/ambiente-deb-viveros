@@ -11,7 +11,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 
 import Link from "next/link";
-import { useSideBarStore } from "@/hooks/sideBarStore";
+import { useSideBarStore } from "@/src/hooks/sideBarStore";
 import { useRouter } from "next/router";
 
 function createSideBarItem(name: string, url: string, icon: JSX.Element) {

@@ -4,7 +4,7 @@ import { EspecieSimpleInterface } from "@/prisma/queries/especiesQueries";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
+import { useDisponibilidadStore } from "@/src/hooks/disponibilidadStore";
 import { isUndefined } from "swr/_internal";
 import { useEffect, useState } from "react";
 

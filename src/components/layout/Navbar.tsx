@@ -3,7 +3,7 @@ import { Fab } from "@mui/material";
 import NavbarOptions from "./NavbarOptions";
 import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
-import { useSideBarStore } from "@/hooks/sideBarStore";
+import { useSideBarStore } from "@/src/hooks/sideBarStore";
 import Link from "next/link";
 
 import Typography from "@mui/material/Typography";

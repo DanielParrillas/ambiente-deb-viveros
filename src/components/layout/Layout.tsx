@@ -1,10 +1,10 @@
-import { useSideBarStore } from "@/hooks/sideBarStore";
+import { useSideBarStore } from "@/src/hooks/sideBarStore";
 import { useState } from "react";
 import Navbar from "./Navbar";
 import SideBar from "./SideBar";
 import Slide from "@mui/material/Slide";
 import { Snackbar, Alert } from "@mui/material";
-import { useAlert } from "@/hooks/alertStore";
+import { useAlert } from "@/src/hooks/alertStore";
 
 interface LayoutProps {
   children: React.ReactNode;

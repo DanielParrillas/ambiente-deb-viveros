@@ -1,10 +1,10 @@
 import useSWR, { Fetcher } from "swr";
 import axios from "axios";
 
-import Example from "@/components/chart/barchart";
+import Example from "@/src/components/chart/barchart";
 import { ViveroCompleteInterface } from "@/prisma/queries/viverosQueries";
-import DisponibilidadesContmap from "@/components/chart/customcontentmap";
-import Piechart from "@/components/chart/piechart";
+import DisponibilidadesContmap from "@/src/components/chart/customcontentmap";
+import Piechart from "@/src/components/chart/piechart";
 const fetcher: Fetcher<ViveroCompleteInterface[], string> = (url: string) =>
   axios.get(url, { params: { tipo: "completo" } }).then((res) => res.data);
 

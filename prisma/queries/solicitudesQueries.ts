@@ -15,6 +15,8 @@ export const defaultQuery = Prisma.validator<Prisma.ViveroSolicitudArgs>()({
 export interface SolicitudDefaultInterface
   extends Prisma.ViveroSolicitudGetPayload<typeof defaultQuery> {}
 
-export const completeQuery = Prisma.validator<Prisma.ViveroSolicitudArgs>()({});
+export const completeQuery = Prisma.validator<Prisma.ViveroSolicitudArgs>()({
+  select: {},
+});
 export interface SolicitudCompleteInterface
   extends Prisma.ViveroSolicitudGetPayload<typeof completeQuery> {}

@@ -1,8 +1,8 @@
 import EspecieAutoComplete from "./components/EspecieAutoComplete";
 import { TextField, Button } from "@mui/material";
-import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
+import { useDisponibilidadStore } from "@/src/hooks/disponibilidadStore";
 import dayjs from "dayjs";
-import { useAlert } from "@/hooks/alertStore";
+import { useAlert } from "@/src/hooks/alertStore";
 import { useRouter } from "next/router";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

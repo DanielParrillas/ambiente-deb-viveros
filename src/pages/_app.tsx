@@ -1,7 +1,7 @@
-import "@/styles/globals.css";
+import "@/src/styles/globals.css";
 import type { AppProps } from "next/app";
-import Layout from "@/components/layout/Layout";
-import { setDayFormat } from "@/lib/dayFormat";
+import Layout from "@/src/components/layout/Layout";
+import { setDayFormat } from "@/src/utils/dayFormat";
 
 setDayFormat();
 

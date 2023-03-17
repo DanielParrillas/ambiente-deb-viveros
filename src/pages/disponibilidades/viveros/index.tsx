@@ -11,7 +11,7 @@ import { DisponibilidadesPorViveroInterface } from "@/prisma/queries/disponibili
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useDisponibilidadStore } from "@/hooks/disponibilidadStore";
+import { useDisponibilidadStore } from "@/src/hooks/disponibilidadStore";
 
 const fetcher: Fetcher<DisponibilidadesPorViveroInterface[], string> = (
   url: string
