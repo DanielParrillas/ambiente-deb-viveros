@@ -4,6 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+import { trpc } from "../utils/trpc";
 
 import { stableSort, getComparator, Order } from "@/src/utils/tableUtils";
 import EncabezadoTabla, { HeadCell } from "@/src/components/tables/Encabezado";
@@ -54,8 +55,11 @@ export default function Solicitudes() {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("calories");
   const [rows, setRows] = useState<Data[]>([]);
+  const disponibilidadQuery = trpc.solicitud.lista.useQuery();
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    console.log(disponibilidadQuery.data);
+  }, [disponibilidadQuery.data]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,

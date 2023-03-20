@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/prisma/client";
+import { prisma } from "@/src/server/prisma";
 
 const defaultQuery = Prisma.validator<Prisma.ViveroArgs>()({
   select: {

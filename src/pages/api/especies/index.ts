@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/prisma/client";
+import { prisma } from "@/src/server/prisma";
 import { defaultQuery, simpleQuery } from "@/prisma/queries/especiesQueries";
 
 export default async function handler(

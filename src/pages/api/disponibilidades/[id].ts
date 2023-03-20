@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/prisma/client";
+import { prisma } from "@/src/server/prisma";
 import { queryDeUnVivero } from "@/prisma/queries/disponibilidadesQueries";
 import { DisponibilidadPUT } from "@/types";
 
