@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { procedure, router } from "../trpc";
+import { publicProcedure, router } from "../trpc";
 import { prisma } from "../prisma";
 import { Prisma } from "@prisma/client";
 
@@ -16,7 +16,7 @@ const defaultSolicitudSelect = Prisma.validator<Prisma.ViveroSolicitudSelect>()(
 );
 
 export const solicitudRouter = router({
-  lista: procedure.query(async ({ input }) => {
+  lista: publicProcedure.input(z.void()).query(async ({ input }) => {
     const solicitudes = await prisma.viveroSolicitud.findMany({
       select: defaultSolicitudSelect,
     });

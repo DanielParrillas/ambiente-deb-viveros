@@ -1,14 +1,13 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import { trpc } from "../utils/trpc";
-
 import { stableSort, getComparator, Order } from "@/src/utils/tableUtils";
 import EncabezadoTabla, { HeadCell } from "@/src/components/tables/Encabezado";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { trpc } from "@/src/utils/trpc";
+import { useAlert } from "@/src/hooks/alertStore";
 
 interface Data {
   calories: number;
@@ -54,12 +53,13 @@ const headCells: HeadCell[] = [
 export default function Solicitudes() {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("calories");
-  const [rows, setRows] = useState<Data[]>([]);
-  const disponibilidadQuery = trpc.solicitud.lista.useQuery();
+  const { lanzarAlerta } = useAlert();
+  const solicitudQuery = trpc.solicitud.lista.useQuery();
 
-  React.useEffect(() => {
-    console.log(disponibilidadQuery.data);
-  }, [disponibilidadQuery.data]);
+  useEffect(() => {
+    if (solicitudQuery.isError)
+      lanzarAlerta(solicitudQuery.error.message, { severity: "error" });
+  }, [solicitudQuery.isError]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -80,20 +80,29 @@ export default function Solicitudes() {
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-          rowCount={rows.length}
+          rowCount={
+            solicitudQuery.data?.lista ? solicitudQuery.data.lista.length : 0
+          }
         />
-        <TableBody>
-          {stableSort(rows, getComparator(order, orderBy)).map(
-            (row: Data, index) => {
+        {solicitudQuery.data === undefined ? (
+          <TableBody></TableBody>
+        ) : (
+          <TableBody>
+            {stableSort(
+              solicitudQuery.data.lista,
+              getComparator(order, orderBy)
+            ).map((row: typeof solicitudQuery.data.lista[0], index) => {
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
                 <TableRow
                   hover
-                  onClick={(event) => handleClick(event, row.name)}
+                  onClick={(event) =>
+                    handleClick(event, row.nombreDelSolicitante)
+                  }
                   role="checkbox"
                   tabIndex={-1}
-                  key={row.name}
+                  key={`row-solicitud-${row.id}`}
                 >
                   <TableCell
                     component="th"
@@ -101,17 +110,21 @@ export default function Solicitudes() {
                     scope="row"
                     padding="none"
                   >
-                    {row.name}
+                    {row.fechaDeSolicitud}
                   </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
+                  <TableCell align="right">{row.estado.nombre}</TableCell>
+                  <TableCell align="right">
+                    {row.institucionSolicitante}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.apellidoDelSolicitante}
+                  </TableCell>
+                  <TableCell align="right">{row.notas}</TableCell>
                 </TableRow>
               );
-            }
-          )}
-        </TableBody>
+            })}
+          </TableBody>
+        )}
       </Table>
     </TableContainer>
   );
