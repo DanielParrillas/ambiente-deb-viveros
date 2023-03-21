@@ -1,10 +1,13 @@
+//MUI
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+import { Chip } from "@mui/material";
+//
 import { stableSort, getComparator, Order } from "@/src/utils/tableUtils";
-import EncabezadoTabla, { HeadCell } from "@/src/components/tables/Encabezado";
+import EncabezadoTabla, { HeadCell } from "@/src/components/table/Encabezado";
 import { useEffect, useState } from "react";
 import { trpc } from "@/src/utils/trpc";
 import { useAlert } from "@/src/hooks/alertStore";
@@ -19,34 +22,34 @@ interface Data {
 
 const headCells: HeadCell[] = [
   {
-    id: "name",
+    id: "fechaDeSolicitud",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Fecha",
   },
   {
-    id: "calories",
-    numeric: true,
+    id: "nombreDelSolicitante",
+    numeric: false,
     disablePadding: false,
-    label: "Calories",
+    label: "Nombre",
   },
   {
-    id: "fat",
-    numeric: true,
+    id: "institucionSolicitante",
+    numeric: false,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Institución",
   },
   {
-    id: "carbs",
-    numeric: true,
+    id: "estado.id",
+    numeric: false,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "Estado",
   },
   {
-    id: "protein",
-    numeric: true,
+    id: "notas",
+    numeric: false,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "Notas",
   },
 ];
 
@@ -112,12 +115,17 @@ export default function Solicitudes() {
                   >
                     {row.fechaDeSolicitud}
                   </TableCell>
-                  <TableCell align="right">{row.estado.nombre}</TableCell>
+                  <TableCell align="right">
+                    {`${row.nombreDelSolicitante} ${row.apellidoDelSolicitante}`}
+                  </TableCell>
                   <TableCell align="right">
                     {row.institucionSolicitante}
                   </TableCell>
                   <TableCell align="right">
-                    {row.apellidoDelSolicitante}
+                    <Chip
+                      label={row.estado.nombre}
+                      color={row.estado.id === 2 ? "success" : "default"}
+                    />
                   </TableCell>
                   <TableCell align="right">{row.notas}</TableCell>
                 </TableRow>

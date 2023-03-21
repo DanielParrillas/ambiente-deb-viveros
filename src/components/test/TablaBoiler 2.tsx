@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
 import { stableSort, getComparator, Order } from "@/src/utils/tableUtils";
-import EncabezadoTabla from "../tables/Encabezado";
+import EncabezadoTabla from "../table/Encabezado";
 
 interface Data {
   calories: number;
