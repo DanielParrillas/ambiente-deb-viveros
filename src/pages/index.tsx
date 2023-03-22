@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { trpc } from "../utils/trpc";
 import axios from "axios";
 
-import ExampleSelectingAndSortingTable from "../components/table/ExampleSAST";
+import ExampleSelectingAndSortingTable from "../components/tables/ExampleSAST";
 
 export default function Home() {
   const hello = trpc.hello.useQuery({ text: "client" });
