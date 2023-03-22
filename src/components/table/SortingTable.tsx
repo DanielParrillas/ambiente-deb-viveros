@@ -1,25 +1,13 @@
-import * as React from "react";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { useState } from "react";
 
 interface Data {
   calories: number;
@@ -77,10 +65,6 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort<T>(
   array: readonly T[],
   comparator: (a: T, b: T) => number
@@ -148,15 +132,8 @@ interface EnhancedTableProps {
   rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+function SortingTableHead(props: EnhancedTableProps) {
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -193,9 +170,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function SortingTable() {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof Data>("calories");
+  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [rowSelected, setRowSelected] = useState<number | false>(false);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -206,14 +184,9 @@ export default function SortingTable() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  const handleSelectAllClick = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {};
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
@@ -240,7 +213,7 @@ export default function SortingTable() {
   return (
     <TableContainer className="h-full rounded-lg bg-white shadow-lg">
       <Table aria-labelledby="tableTitle" stickyHeader>
-        <EnhancedTableHead
+        <SortingTableHead
           numSelected={selected.length}
           order={order}
           orderBy={orderBy}
@@ -255,7 +228,6 @@ export default function SortingTable() {
 
             return (
               <TableRow
-                hover
                 onClick={(event) => handleClick(event, row.name)}
                 aria-checked={isItemSelected}
                 tabIndex={-1}
