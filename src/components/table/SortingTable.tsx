@@ -3,6 +3,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import type { TableCellProps } from "@mui/material/TableCell";
+import type { TableRowProps } from "@mui/material/TableRow";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -57,7 +58,6 @@ interface HeadCell extends TableCellProps {
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -111,6 +111,8 @@ interface SortingTableProps {
   filas: Object[];
   encabezados: HeadCell[];
   encabezadoCellGeneralProps?: TableCellProps;
+  CellGeneralProps?: TableCellProps;
+  filaGeneralProps?: TableRowProps;
 }
 
 export default function SortingTable({
@@ -121,7 +123,6 @@ export default function SortingTable({
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("");
   const [selected, setSelected] = useState<readonly string[]>([]);
-  const [rowSelected, setRowSelected] = useState<number | false>(false);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -132,40 +133,13 @@ export default function SortingTable({
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {};
-
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
   return (
-    <TableContainer className="h-full rounded-lg bg-white shadow-lg">
+    <TableContainer className="h-full rounded-lg bg-white shadow-lg select-none">
       <Table aria-labelledby="tableTitle" stickyHeader>
         <SortingTableHead
           numSelected={selected.length}
           order={order}
           orderBy={orderBy}
-          onSelectAllClick={handleSelectAllClick}
           onRequestSort={handleRequestSort}
           rowCount={filas.length}
           encabezados={encabezados}
@@ -174,24 +148,13 @@ export default function SortingTable({
         <TableBody>
           {stableSort(filas, getComparator(order, orderBy)).map(
             (row, index) => {
-              const isItemSelected = isSelected(row.name);
-              const labelId = `enhanced-table-checkbox-${index}`;
-
               return (
-                <TableRow
-                  onClick={(event) => handleClick(event, row.name)}
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.name}
-                  selected={isItemSelected}
-                >
-                  <TableCell component="th" id={labelId} scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
+                <TableRow key={row.name}>
+                  {encabezados.map((encabezado, cellIndex) => (
+                    <TableCell key={`cell-${cellIndex}-${encabezado}`}>
+                      {row[encabezado.id]}
+                    </TableCell>
+                  ))}
                 </TableRow>
               );
             }
