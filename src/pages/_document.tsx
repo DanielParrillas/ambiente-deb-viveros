@@ -5,7 +5,6 @@ export default function Document() {
     <Html lang="es">
       <Head>
         <link rel="shortcut icon" href="/icon.png" />
-        <title>Viveros</title>
       </Head>
 
       <body>

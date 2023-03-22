@@ -11,11 +11,16 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import { useState } from "react";
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
+export interface DataCell {
+  value: string | number;
+  content: string | JSX.Element;
+}
+
+function descendingComparator(a: any, b: any, orderBy: string) {
+  if (b[orderBy].content < a[orderBy].content) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b[orderBy].content > a[orderBy].content) {
     return 1;
   }
   return 0;
@@ -23,13 +28,10 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = "asc" | "desc";
 
-function getComparator<Key extends keyof any>(
+function getComparator(
   order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
+  orderBy: string
+): (a: any, b: any) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -50,18 +52,17 @@ function stableSort(
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell extends TableCellProps {
+interface Encabezado extends TableCellProps {
   id: string;
   label: string;
 }
 
 interface EnhancedTableProps {
-  numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   order: Order;
-  orderBy: string;
+  orderBy?: string;
   rowCount: number;
-  encabezados: HeadCell[];
+  encabezados: Encabezado[];
   encabezadoCellGeneralProps?: TableCellProps;
 }
 
@@ -109,20 +110,23 @@ function SortingTableHead(props: EnhancedTableProps) {
 
 interface SortingTableProps {
   filas: Object[];
-  encabezados: HeadCell[];
+  encabezados: Encabezado[];
   encabezadoCellGeneralProps?: TableCellProps;
   CellGeneralProps?: TableCellProps;
   filaGeneralProps?: TableRowProps;
+  ordenadoPor?: string;
 }
 
 export default function SortingTable({
   filas,
+  filaGeneralProps,
   encabezados,
   encabezadoCellGeneralProps,
+  ordenadoPor,
 }: SortingTableProps) {
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<string>("");
-  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [orderBy, setOrderBy] = useState<string | undefined>(ordenadoPor);
+  const [selected, setSelected] = useState<string>();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -137,7 +141,6 @@ export default function SortingTable({
     <TableContainer className="h-full rounded-lg bg-white shadow-lg select-none">
       <Table aria-labelledby="tableTitle" stickyHeader>
         <SortingTableHead
-          numSelected={selected.length}
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
@@ -146,19 +149,20 @@ export default function SortingTable({
           encabezadoCellGeneralProps={encabezadoCellGeneralProps}
         />
         <TableBody>
-          {stableSort(filas, getComparator(order, orderBy)).map(
-            (row, index) => {
-              return (
-                <TableRow key={row.name}>
-                  {encabezados.map((encabezado, cellIndex) => (
-                    <TableCell key={`cell-${cellIndex}-${encabezado}`}>
-                      {row[encabezado.id]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              );
-            }
-          )}
+          {(orderBy === undefined
+            ? filas
+            : stableSort(filas, getComparator(order, orderBy))
+          ).map((row, index) => {
+            return (
+              <TableRow key={`${index}-row-sorting`} {...filaGeneralProps}>
+                {encabezados.map((encabezado, cellIndex) => (
+                  <TableCell key={`cell-${cellIndex}-${encabezado}`}>
+                    {row[encabezado.id].content}
+                  </TableCell>
+                ))}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
