@@ -2,44 +2,13 @@ import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import type { TableCellProps } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import { useState } from "react";
-
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -65,11 +34,11 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
+function stableSort(
+  array: readonly any[],
+  comparator: (a: any, b: any) => number
 ) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -80,75 +49,44 @@ function stableSort<T>(
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
+interface HeadCell extends TableCellProps {
+  id: string;
   label: string;
-  numeric: boolean;
 }
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: false,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
-    numeric: true,
-    disablePadding: false,
-    label: "Calories",
-  },
-  {
-    id: "fat",
-    numeric: true,
-    disablePadding: false,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
-  },
-];
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
+  encabezados: HeadCell[];
+  encabezadoCellGeneralProps?: TableCellProps;
 }
 
 function SortingTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
+  const {
+    order,
+    orderBy,
+    encabezados,
+    encabezadoCellGeneralProps,
+    onRequestSort,
+  } = props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: string) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {encabezados.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
-            className="p-4 bg-marn-light text-white"
+            {...encabezadoCellGeneralProps}
+            {...headCell}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -169,15 +107,25 @@ function SortingTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function SortingTable() {
+interface SortingTableProps {
+  filas: Object[];
+  encabezados: HeadCell[];
+  encabezadoCellGeneralProps?: TableCellProps;
+}
+
+export default function SortingTable({
+  filas,
+  encabezados,
+  encabezadoCellGeneralProps,
+}: SortingTableProps) {
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof Data>("calories");
+  const [orderBy, setOrderBy] = useState<string>("");
   const [selected, setSelected] = useState<readonly string[]>([]);
   const [rowSelected, setRowSelected] = useState<number | false>(false);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: string
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -219,31 +167,35 @@ export default function SortingTable() {
           orderBy={orderBy}
           onSelectAllClick={handleSelectAllClick}
           onRequestSort={handleRequestSort}
-          rowCount={rows.length}
+          rowCount={filas.length}
+          encabezados={encabezados}
+          encabezadoCellGeneralProps={encabezadoCellGeneralProps}
         />
         <TableBody>
-          {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-            const isItemSelected = isSelected(row.name);
-            const labelId = `enhanced-table-checkbox-${index}`;
+          {stableSort(filas, getComparator(order, orderBy)).map(
+            (row, index) => {
+              const isItemSelected = isSelected(row.name);
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-            return (
-              <TableRow
-                onClick={(event) => handleClick(event, row.name)}
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.name}
-                selected={isItemSelected}
-              >
-                <TableCell component="th" id={labelId} scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-              </TableRow>
-            );
-          })}
+              return (
+                <TableRow
+                  onClick={(event) => handleClick(event, row.name)}
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.name}
+                  selected={isItemSelected}
+                >
+                  <TableCell component="th" id={labelId} scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.calories}</TableCell>
+                  <TableCell align="right">{row.fat}</TableCell>
+                  <TableCell align="right">{row.carbs}</TableCell>
+                  <TableCell align="right">{row.protein}</TableCell>
+                </TableRow>
+              );
+            }
+          )}
         </TableBody>
       </Table>
     </TableContainer>
