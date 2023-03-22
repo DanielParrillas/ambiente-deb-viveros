@@ -17,10 +17,10 @@ export interface DataCell {
 }
 
 function descendingComparator(a: any, b: any, orderBy: string) {
-  if (b[orderBy].content < a[orderBy].content) {
+  if (b[orderBy].value < a[orderBy].value) {
     return -1;
   }
-  if (b[orderBy].content > a[orderBy].content) {
+  if (b[orderBy].value > a[orderBy].value) {
     return 1;
   }
   return 0;
@@ -52,7 +52,7 @@ function stableSort(
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface Encabezado extends TableCellProps {
+export interface Encabezado extends TableCellProps {
   id: string;
   label: string;
 }

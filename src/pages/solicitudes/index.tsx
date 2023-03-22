@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { trpc } from "@/src/utils/trpc";
 import { useAlert } from "@/src/hooks/alertStore";
-import SortingTable from '@/src/components/table/SortingTable';
-import type { Encabezado } from '@/src/components/table/Encabezado';
+import SortingTable from "@/src/components/table/SortingTable";
+import type { Encabezado } from "@/src/components/table/SortingTable";
 
-const headers: 
+const headers: Encabezado[] = [];
 
 export default function Solicitudes() {
   const { lanzarAlerta } = useAlert();
@@ -15,13 +15,13 @@ export default function Solicitudes() {
       lanzarAlerta(solicitudQuery.error.message, { severity: "error" });
   }, [solicitudQuery.isError]);
 
-  const formatSolicitudes =()=> {
-    let data = []
+  const formatSolicitudes = () => {
+    let data = [];
 
-    if(solicitudQuery.data?.lista){
-      return data
+    if (solicitudQuery.data?.lista) {
+      return data;
     }
-  }
+  };
 
   return <SortingTable />;
 }
