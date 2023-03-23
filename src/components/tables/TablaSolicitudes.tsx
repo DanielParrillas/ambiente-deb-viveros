@@ -21,6 +21,7 @@ export interface Data {
   id: number;
   institucion: string;
   notas: string;
+  cantidadSolicitadaTotal: number;
 }
 
 interface HeadCell {
@@ -45,6 +46,7 @@ const headCells: readonly HeadCell[] = [
     id: "estado",
     label: "Estado",
   },
+  { id: "cantidadSolicitadaTotal", label: "Solicitado" },
 ];
 
 interface TablaSolicitudesProps {
@@ -52,7 +54,7 @@ interface TablaSolicitudesProps {
 }
 
 export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
-  const [order, setOrder] = React.useState<Order>("asc");
+  const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("fecha");
   const [selected, setSelected] = React.useState<number | false>(false);
 
@@ -123,6 +125,9 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
                   ) : (
                     row.estado
                   )}
+                </TableCell>
+                <TableCell align="right">
+                  {row.cantidadSolicitadaTotal}
                 </TableCell>
               </TableRow>
             );

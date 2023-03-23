@@ -55,15 +55,21 @@ export const solicitudRouter = router({
   lista: publicProcedure.input(z.void()).query(async ({ input }) => {
     const solicitudes = await prisma.viveroSolicitud.findMany({
       select: defaultSolicitudSelect,
-      orderBy: [{ fechaDeSolicitud: "desc" }],
     });
 
-    const totalDetalle = await prisma.viveroSolicitudDetalle.groupBy({
+    const totalesPorSolicitud = await prisma.viveroSolicitudDetalle.groupBy({
       by: ["solicitudId"],
       _sum: { cantidad: true },
     });
 
-    return { lista: solicitudes, total: totalDetalle };
+    const response = solicitudes.map((solicitud) => {
+      const totalDeSolicitud = totalesPorSolicitud.find(
+        (total) => solicitud.id === total.solicitudId
+      );
+      return { ...solicitud, cantidad: totalDeSolicitud?._sum.cantidad };
+    });
+
+    return { lista: response };
   }),
   porId: publicProcedure.input(z.number()).query(async ({ input }) => {
     const solicitud = await prisma.viveroSolicitud.findUnique({

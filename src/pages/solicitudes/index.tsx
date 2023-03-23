@@ -28,8 +28,6 @@ export default function Solicitudes() {
   useEffect(() => {
     if (solicitudQuery.data?.lista) {
       lanzarAlerta("Solicitudes cargadas", { severity: "success" });
-      console.log(solicitudQuery.data.lista);
-      console.log(solicitudQuery.data.total);
       setSolicitudes(generarFilas());
     }
   }, [solicitudQuery.data]);
@@ -44,6 +42,7 @@ export default function Solicitudes() {
         nombreCompleto:
           solicitud.nombreDelSolicitante + solicitud.apellidoDelSolicitante,
         notas: solicitud.notas ? solicitud.notas : "Sin notas",
+        cantidadSolicitadaTotal: solicitud.cantidad ? solicitud.cantidad : 0,
       }));
     } else {
       return [];
