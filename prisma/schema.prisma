@@ -120,7 +120,7 @@ model ViveroSolicitud {
   actualizado            DateTime                 @default(now()) @db.DateTime(0)
   eliminado              DateTime?                @db.Date
   estaEliminado          Int                      @default(0) @db.TinyInt
-  ViveroAsignacion       ViveroAsignacion[]
+  asignaciones           ViveroAsignacion[]
   estado                 ViveroSolicitudEstado    @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudEsdato")
   municipio              Municipio                @relation(fields: [municipioAReforestarId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudMunicipio")
   detalles               ViveroSolicitudDetalle[]
