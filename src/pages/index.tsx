@@ -1,9 +1,5 @@
-import Example from "@/src/components/chart/firtChart";
 import { useEffect } from "react";
 import { trpc } from "../utils/trpc";
-import axios from "axios";
-
-import ExampleSelectingAndSortingTable from "../components/tables/ExampleSAST";
 
 export default function Home() {
   const hello = trpc.hello.useQuery({ text: "client" });
@@ -12,5 +8,5 @@ export default function Home() {
     console.log(hello.data);
   }, [hello.data]);
 
-  return <ExampleSelectingAndSortingTable />;
+  return <div>Index</div>;
 }

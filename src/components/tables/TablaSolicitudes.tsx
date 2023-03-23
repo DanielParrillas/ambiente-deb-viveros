@@ -7,10 +7,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import { Chip } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import dayjs from "dayjs";
 import { getComparator, stableSort } from "@/src/utils/sort";
 import type { Order } from "@/src/utils/tableUtils";
+import { useRouter } from "next/router";
 
 export interface Data {
   nombreCompleto: string;
@@ -56,6 +58,8 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
 
   let seleccionPrevia: typeof selected = selected;
 
+  const router = useRouter();
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -71,7 +75,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
       seleccionPrevia = solicitudId;
     } else {
       if (seleccionPrevia === solicitudId) {
-        console.log("do something");
+        router.push(`/solicitudes/detalle`);
       } else {
         setSelected(false);
         seleccionPrevia = false;
@@ -80,7 +84,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
   };
 
   return (
-    <TableContainer className="bg-white h-full shadow-lg rounded-lg">
+    <TableContainer className="bg-white h-fit shadow-lg rounded-lg select-none">
       <Table aria-labelledby="tableTitle" stickyHeader>
         <EnhancedTableHead
           order={order}
@@ -106,14 +110,26 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
                   {dayjs(row.fecha).format("LL")}
                 </TableCell>
                 <TableCell>{row.nombreCompleto}</TableCell>
-                <TableCell>{row.institucion}</TableCell>
-                <TableCell>{row.estado}</TableCell>
+                <TableCell>
+                  {row.institucion.toLocaleLowerCase() === "persona natural" ? (
+                    <Chip label="Persona natural" />
+                  ) : (
+                    row.institucion
+                  )}
+                </TableCell>
+                <TableCell>
+                  {row.estado.toLocaleLowerCase() === "pendiente" ? (
+                    <Chip label={row.estado} color="warning" />
+                  ) : (
+                    row.estado
+                  )}
+                </TableCell>
               </TableRow>
             );
           })}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} children="Sin solicitudes" />
+              <TableCell colSpan={4} children="...cargando" />
             </TableRow>
           )}
         </TableBody>

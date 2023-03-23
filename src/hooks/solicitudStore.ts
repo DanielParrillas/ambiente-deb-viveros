@@ -1,10 +1,35 @@
 import { create } from "zustand";
-import { SolicitudDefaultInterface } from "@/prisma/queries/solicitudesQueries";
+import { Prisma } from "@prisma/client";
 
-interface SolicitudeState {
-  solicitudes: SolicitudDefaultInterface[];
+interface Estado {
+  id: number;
+  nombre: string;
 }
 
-export const useSolicitudStore = create<SolicitudeState>()((set, get) => ({
-  solicitudes: [],
+interface Solicitud {
+  id: number | "";
+  estado: Estado | "";
+  nombres: string | "";
+  apellidos: string | "";
+  institucion: string | "";
+  fechas: string | "";
+  notas: string | "";
+}
+
+const initialSolicitud: Solicitud = {
+  id: "",
+  estado: "",
+  nombres: "",
+  apellidos: "",
+  institucion: "",
+  fechas: "",
+  notas: "",
+};
+
+interface SolicitudState {
+  solicitud: Solicitud;
+}
+
+export const useSolicitudStore = create<SolicitudState>()((set, get) => ({
+  solicitud: initialSolicitud,
 }));
