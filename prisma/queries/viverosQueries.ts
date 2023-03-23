@@ -65,7 +65,7 @@ export const completeQuery = Prisma.validator<Prisma.ViveroArgs>()({
         },
       },
     },
-    asignacionesPorSolicitud: {
+    asignaciones: {
       select: {
         id: true,
       },

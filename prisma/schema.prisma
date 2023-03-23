@@ -45,7 +45,7 @@ model Vivero {
   telResponsable             String?                        @db.VarChar(20)
   googleMap                  String?                        @db.VarChar(50)
   municipio                  Municipio                      @relation(fields: [municipioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroMunicipio")
-  ViveroAsignacion           ViveroAsignacion[]
+  asignaciones           ViveroAsignacion[]
   disponibilidadesPorEspecie ViveroDisponibilidadEspecies[]
 
   @@index([municipioId], map: "fkViveroMunicipio_idx")
@@ -72,7 +72,7 @@ model ViveroEspecie {
   categoriaId           Int
   comun                 String                         @db.VarChar(45)
   cientifico            String                         @db.VarChar(100)
-  ViveroAsignacion      ViveroAsignacion[]
+  asignaciones      ViveroAsignacion[]
   disponibilidades      ViveroDisponibilidadEspecies[]
   categoria             ViveroEspecieCategoria         @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieCategoria")
   estado                ViveroEspecieEstado            @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieEstado")

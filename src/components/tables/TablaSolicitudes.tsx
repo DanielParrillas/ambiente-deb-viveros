@@ -134,7 +134,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
           })}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} children="...cargando" />
+              <TableCell colSpan={4}>cargando...</TableCell>
             </TableRow>
           )}
         </TableBody>
