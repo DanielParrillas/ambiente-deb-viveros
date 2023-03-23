@@ -211,7 +211,7 @@ model ViveroAsignacion {
   estaEliminado     Int             @default(0) @db.TinyInt
   especie     ViveroEspecie   @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigEspecie")
   solicitud   ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigSolicitud")
-  Vivero            Vivero          @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigVivero")
+  vivero            Vivero          @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigVivero")
 
   @@index([especieId], map: "fkVivSolAsigEspecie_idx")
   @@index([solicitudId], map: "fkVivAsigSolicitud_idx")

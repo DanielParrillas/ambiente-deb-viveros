@@ -46,7 +46,7 @@ const completeSolicitudSelect =
         id: true,
         actualizado: true,
         vivero: { select: { id: true, nombre: true } },
-        detalles: { select: {} },
+        especie: { select: { id: true, comun: true, cientifico: true } },
       },
     },
   });
