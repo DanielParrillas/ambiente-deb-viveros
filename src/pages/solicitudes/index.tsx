@@ -14,12 +14,7 @@ export default function Solicitudes() {
   const solicitudQuery = trpc.solicitud.lista.useQuery();
   const [solicitudes, setSolicitudes] = useState<SolicitudData[]>([]);
   const { lanzarAlerta } = useAlert();
-  const { limpiarSolicitud } = useSolicitudStore();
   const router = useRouter();
-
-  useEffect(() => {
-    limpiarSolicitud();
-  }, []);
 
   useEffect(() => {
     lanzarAlerta("Cargando solicitudes...", { severity: "info" });

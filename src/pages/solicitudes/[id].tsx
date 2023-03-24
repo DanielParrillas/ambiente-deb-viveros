@@ -1,14 +1,20 @@
 import { useAlert } from "@/src/hooks/alertStore";
 import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 import { trpc } from "@/src/utils/trpc";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function SolicitudDetalle() {
-  const { solicitud, setSolicitud } = useSolicitudStore();
+  const { solicitud, setSolicitud, limpiarSolicitud } = useSolicitudStore();
+  const router = useRouter();
   const { lanzarAlerta } = useAlert();
   const solicitudQuery = trpc.solicitud.porId.useQuery(
-    solicitud.id === "" ? 0 : solicitud.id
+    parseInt(router.query.id ? router.query.id[0] : "0")
   );
+
+  useEffect(() => {
+    limpiarSolicitud();
+  }, []);
 
   useEffect(() => {
     lanzarAlerta("Cargando solicitud...", { severity: "info" });

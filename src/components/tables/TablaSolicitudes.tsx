@@ -79,8 +79,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
       seleccionPrevia = solicitudId;
     } else {
       if (seleccionPrevia === solicitudId) {
-        setSolicitud({ ...solicitud, id: solicitudId });
-        router.push(`/solicitudes/detalle`);
+        router.push(`/solicitudes/${solicitudId}`);
       } else {
         setSelected(false);
         seleccionPrevia = false;
