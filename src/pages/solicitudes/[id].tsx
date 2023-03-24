@@ -3,6 +3,7 @@ import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 import { trpc } from "@/src/utils/trpc";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import TabsSolicitud from "@/src/components/tabs/TabsSolicitud";
 
 export default function SolicitudDetalle() {
   const { solicitud, setSolicitud, limpiarSolicitud } = useSolicitudStore();
@@ -34,10 +35,11 @@ export default function SolicitudDetalle() {
   }, [solicitudQuery.isError]);
 
   return (
-    <div className="w-full bg-slate-400">
-      <p className="max-w-full overflow-x-scroll">
-        {JSON.stringify(solicitud)}
-      </p>
+    <div className="h-full flex flex-col">
+      <div className="mb-4">
+        <h3>{`${solicitud.nombreDelSolicitante} ${solicitud.apellidoDelSolicitante}`}</h3>
+      </div>
+      <TabsSolicitud />
     </div>
   );
 }
