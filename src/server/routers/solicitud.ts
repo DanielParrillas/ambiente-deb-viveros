@@ -44,7 +44,6 @@ const completeSolicitudSelect =
     asignaciones: {
       select: {
         id: true,
-        actualizado: true,
         vivero: { select: { id: true, nombre: true } },
         especie: { select: { id: true, comun: true, cientifico: true } },
       },
@@ -74,8 +73,9 @@ export const solicitudRouter = router({
   porId: publicProcedure.input(z.number()).query(async ({ input }) => {
     const solicitud = await prisma.viveroSolicitud.findUnique({
       where: { id: input },
+      select: completeSolicitudSelect,
     });
 
-    return { solicitud };
+    return { solicitud: solicitud };
   }),
 });

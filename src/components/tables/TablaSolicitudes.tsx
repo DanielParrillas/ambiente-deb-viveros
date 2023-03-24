@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { getComparator, stableSort } from "@/src/utils/sort";
 import type { Order } from "@/src/utils/tableUtils";
 import { useRouter } from "next/router";
+import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
 export interface Data {
   nombreCompleto: string;
@@ -57,6 +58,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("fecha");
   const [selected, setSelected] = React.useState<number | false>(false);
+  const { setSolicitud, solicitud } = useSolicitudStore();
 
   let seleccionPrevia: typeof selected = selected;
 
@@ -77,6 +79,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
       seleccionPrevia = solicitudId;
     } else {
       if (seleccionPrevia === solicitudId) {
+        setSolicitud({ ...solicitud, id: solicitudId });
         router.push(`/solicitudes/detalle`);
       } else {
         setSelected(false);

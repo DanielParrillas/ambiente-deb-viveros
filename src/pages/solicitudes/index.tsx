@@ -8,17 +8,22 @@ import SearchIcon from "@mui/icons-material/Search";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
+import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
 export default function Solicitudes() {
   const solicitudQuery = trpc.solicitud.lista.useQuery();
   const [solicitudes, setSolicitudes] = useState<SolicitudData[]>([]);
   const { lanzarAlerta } = useAlert();
-
+  const { limpiarSolicitud } = useSolicitudStore();
   const router = useRouter();
 
   useEffect(() => {
-    lanzarAlerta("Cargando solicitudes...", { severity: "info" });
+    limpiarSolicitud();
   }, []);
+
+  useEffect(() => {
+    lanzarAlerta("Cargando solicitudes...", { severity: "info" });
+  }, [solicitudQuery.isLoading]);
 
   useEffect(() => {
     if (solicitudQuery.isError || solicitudQuery.isRefetchError)
