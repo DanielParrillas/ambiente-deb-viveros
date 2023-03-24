@@ -88,7 +88,7 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
   };
 
   return (
-    <TableContainer className="bg-white h-fit shadow-lg rounded-lg select-none">
+    <TableContainer className="bg-white h-full rounded-lg select-none">
       <Table aria-labelledby="tableTitle" stickyHeader>
         <EnhancedTableHead
           order={order}

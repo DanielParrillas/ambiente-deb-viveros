@@ -70,7 +70,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-marn-dark w-screen h-16 flex items-center justify-between py-2 px-3 z-30 absolute shadow-lg">
+    <nav className="bg-marn-dark w-screen h-16 flex items-center justify-between py-2 px-3 z-30 absolute ">
       <div className="flex items-center">
         <Fab
           size="medium"

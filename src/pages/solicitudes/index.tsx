@@ -50,9 +50,9 @@ export default function Solicitudes() {
   };
 
   return (
-    <div className="h-full">
+    <div className="flex flex-col h-full">
       <div className="w-full mb-4 flex gap-2 md:gap-4 justify-between">
-        <div className="flex items-end sm:basis-1/2">
+        <div className="flex items-end basis-full md:basis-1/2">
           <SearchIcon />
           <TextField
             label="Buscar"
@@ -67,7 +67,7 @@ export default function Solicitudes() {
             color="success"
             variant="outlined"
             startIcon={<GetAppIcon />}
-            className="normal-case"
+            className="p-1 md:p-2 normal-case text-xs md:text-sm"
           >
             Exportar
           </Button>
@@ -78,7 +78,7 @@ export default function Solicitudes() {
             onClick={() => {
               router.push("/solicitudes/nuevo");
             }}
-            className="normal-case"
+            className="p-1 flex justify-center md:p-2 normal-case text-xs md:text-sm"
           >
             Agregar
           </Button>

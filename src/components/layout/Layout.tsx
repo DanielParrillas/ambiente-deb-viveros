@@ -25,12 +25,9 @@ export default function Layout({ children }: LayoutProps) {
     <>
       <Navbar />
       {sideBar.estaVisible === true && <SideBar />}
-      {/* <Slide in={sideBar.estaVisible} mountOnEnter unmountOnExit>
-        <SideBar />
-      </Slide> */}
 
       <main
-        className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-gray-100"
+        className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-marn-dark p-4"
         onClick={() => {
           if (sideBar.estaVisible === true) {
             cerrarSideBar();
@@ -38,12 +35,15 @@ export default function Layout({ children }: LayoutProps) {
           setOpen(true);
         }}
       >
-        <div className="w-full h-full overflow-y-auto p-4">{children}</div>
+        <div className="w-full h-full overflow-y-auto p-4 bg-gray-100 rounded-md">
+          {children}
+        </div>
       </main>
-      <Snackbar open={alerta} autoHideDuration={6000} onClose={cerrarAlerta}>
+      <Snackbar open={alerta} autoHideDuration={5000} onClose={cerrarAlerta}>
         <Alert
           onClose={cerrarAlerta}
           severity="success"
+          variant="filled"
           sx={{ width: "100%" }}
           {...alertProps}
         >
