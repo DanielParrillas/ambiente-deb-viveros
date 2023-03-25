@@ -4,6 +4,7 @@ import { trpc } from "@/src/utils/trpc";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import TabsSolicitud from "@/src/components/tabs/TabsSolicitud";
+import { Chip } from "@mui/material";
 
 export default function SolicitudDetalle() {
   const { solicitud, setSolicitud, limpiarSolicitud } = useSolicitudStore();
@@ -36,8 +37,18 @@ export default function SolicitudDetalle() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="mb-4">
+      <div className="flex items-center grid-cols-2 mb-4 gap-2">
         <h3>{`${solicitud.nombreDelSolicitante} ${solicitud.apellidoDelSolicitante}`}</h3>
+        <Chip
+          size="small"
+          label={
+            solicitud.institucionSolicitante
+              ? solicitud.institucionSolicitante
+              : "Persona natural"
+          }
+          className="text-xs"
+          color={solicitud.institucionSolicitante ? "default" : "primary"}
+        />
       </div>
       <TabsSolicitud />
     </div>

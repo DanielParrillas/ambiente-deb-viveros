@@ -116,7 +116,11 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
                 <TableCell>{row.nombreCompleto}</TableCell>
                 <TableCell>
                   {row.institucion.toLocaleLowerCase() === "persona natural" ? (
-                    <Chip label="Persona natural" />
+                    <Chip
+                      label={row.institucion}
+                      color="info"
+                      variant="outlined"
+                    />
                   ) : (
                     row.institucion
                   )}

@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
           setOpen(true);
         }}
       >
-        <div className="w-full h-full overflow-y-auto p-4 bg-gray-100 rounded-md">
+        <div className="w-full h-full overflow-y-auto p-4 bg-gray-200 rounded-md">
           {children}
         </div>
       </main>
