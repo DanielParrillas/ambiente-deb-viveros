@@ -22,11 +22,11 @@ interface Solicitud {
   id: number | "";
   nombreDelSolicitante: string | "";
   apellidoDelSolicitante: string | "";
-  institucionSolicitante: string | "";
+  institucionSolicitante: string | null;
   fechaDeSolicitud: string | "";
   lugarAReforestar: string | "";
   correoDelSolicitante: string | "";
-  telefonoDelSolicitante: string | "" | null;
+  telefonoDelSolicitante: string | null;
   celularDelSolicitante: string | "";
   notas: string | "" | null;
   estado: GeneralDataSimple | "";
@@ -41,11 +41,11 @@ const initialSolicitud: Solicitud = {
   id: "",
   nombreDelSolicitante: "",
   apellidoDelSolicitante: "",
-  institucionSolicitante: "",
+  institucionSolicitante: null,
   fechaDeSolicitud: "",
   notas: "",
   celularDelSolicitante: "",
-  telefonoDelSolicitante: "",
+  telefonoDelSolicitante: null,
   correoDelSolicitante: "",
   lugarAReforestar: "",
   estado: "",

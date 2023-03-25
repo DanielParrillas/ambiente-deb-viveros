@@ -45,7 +45,7 @@ model Vivero {
   telResponsable             String?                        @db.VarChar(20)
   googleMap                  String?                        @db.VarChar(50)
   municipio                  Municipio                      @relation(fields: [municipioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroMunicipio")
-  asignaciones           ViveroAsignacion[]
+  asignaciones               ViveroAsignacion[]
   disponibilidadesPorEspecie ViveroDisponibilidadEspecies[]
 
   @@index([municipioId], map: "fkViveroMunicipio_idx")
@@ -72,7 +72,7 @@ model ViveroEspecie {
   categoriaId           Int
   comun                 String                         @db.VarChar(45)
   cientifico            String                         @db.VarChar(100)
-  asignaciones      ViveroAsignacion[]
+  asignaciones          ViveroAsignacion[]
   disponibilidades      ViveroDisponibilidadEspecies[]
   categoria             ViveroEspecieCategoria         @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieCategoria")
   estado                ViveroEspecieEstado            @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieEstado")
@@ -109,7 +109,7 @@ model ViveroSolicitud {
   nombreDelSolicitante   String                   @db.VarChar(45)
   apellidoDelSolicitante String                   @db.VarChar(45)
   duiDelSolicitante      String                   @db.VarChar(20)
-  institucionSolicitante String                   @db.VarChar(100)
+  institucionSolicitante String?                  @db.VarChar(100)
   fechaDeSolicitud       DateTime                 @db.DateTime(0)
   lugarAReforestar       String                   @db.VarChar(100)
   correoDelSolicitante   String                   @db.VarChar(45)
@@ -209,8 +209,8 @@ model ViveroAsignacion {
   creado            DateTime        @default(now()) @db.DateTime(0)
   eliminado         DateTime?       @db.DateTime(0)
   estaEliminado     Int             @default(0) @db.TinyInt
-  especie     ViveroEspecie   @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigEspecie")
-  solicitud   ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigSolicitud")
+  especie           ViveroEspecie   @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigEspecie")
+  solicitud         ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigSolicitud")
   vivero            Vivero          @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigVivero")
 
   @@index([especieId], map: "fkVivSolAsigEspecie_idx")

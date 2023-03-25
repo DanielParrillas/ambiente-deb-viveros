@@ -38,7 +38,10 @@ export default function Solicitudes() {
         estado: solicitud.estado.nombre,
         fecha: solicitud.fechaDeSolicitud,
         id: solicitud.id,
-        institucion: solicitud.institucionSolicitante,
+        institucion:
+          solicitud.institucionSolicitante === null
+            ? "Persona natural"
+            : solicitud.institucionSolicitante,
         nombreCompleto:
           solicitud.nombreDelSolicitante + solicitud.apellidoDelSolicitante,
         notas: solicitud.notas ? solicitud.notas : "Sin notas",

@@ -25,7 +25,10 @@ const getViveros = async (
   query: typeof defaultQuery | typeof completeQuery
 ) => {
   try {
-    const viveros = await prisma.vivero.findMany(query);
+    const viveros = await prisma.vivero.findMany({
+      select: query.select,
+      orderBy: [{ nombre: "asc" }],
+    });
     res.json(viveros);
   } catch (error) {
     console.log(error);

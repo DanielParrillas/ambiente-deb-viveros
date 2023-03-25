@@ -72,7 +72,10 @@ const getDisponibilidadesPorVivero = async (
   res: NextApiResponse
 ) => {
   try {
-    const disponibilidades = await prisma.vivero.findMany(queryPorVivero);
+    const disponibilidades = await prisma.vivero.findMany({
+      select: queryPorVivero.select,
+      orderBy: [{ nombre: "asc" }],
+    });
     res.json(disponibilidades);
   } catch (error) {
     let errorMessage =
