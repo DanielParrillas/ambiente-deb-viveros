@@ -17,67 +17,67 @@ model Departamento {
 }
 
 model Municipio {
-  id              Int               @id @default(autoincrement())
-  departamentoId  Int
-  municipio       String            @db.VarChar(45)
-  nombre          String            @db.VarChar(45)
-  longitud        Decimal           @db.Decimal(10, 7)
-  latitud         Decimal           @db.Decimal(10, 7)
-  departamento    Departamento      @relation(fields: [departamentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_municipio_departamento")
-  viveros         Vivero[]
-  solicitudesAViveros     ViveroSolicitud[]
+  id                  Int               @id @default(autoincrement())
+  departamentoId      Int
+  municipio           String            @db.VarChar(45)
+  nombre              String            @db.VarChar(45)
+  longitud            Decimal           @db.Decimal(10, 7)
+  latitud             Decimal           @db.Decimal(10, 7)
+  departamento        Departamento      @relation(fields: [departamentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_municipio_departamento")
+  viveros             Vivero[]
+  solicitudesAViveros ViveroSolicitud[]
 
   @@index([departamentoId], map: "FK_municipio_departamento_idx")
 }
 
 model Vivero {
-  id                           Int                            @id @default(autoincrement())
-  municipioId                  Int
-  nombre                       String                         @db.VarChar(100)
-  meta                         Int
-  latitud                      Decimal                        @db.Decimal(10, 7)
-  longitud                     Decimal                        @db.Decimal(10, 7)
-  estaActivo                   Int                            @default(1) @db.TinyInt
-  direccion                    String?                        @db.VarChar(255)
-  enlace                       String?                        @db.VarChar(50)
-  telEnlace                    String?                        @db.VarChar(20)
-  responsable                  String?                        @db.VarChar(50)
-  telResponsable               String?                        @db.VarChar(20)
-  googleMap                    String?                        @db.VarChar(50)
-  municipio                    Municipio                      @relation(fields: [municipioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroMunicipio")
-  disponibilidadesPorEspecie   ViveroDisponibilidadEspecies[]
-  asignacionesPorSolicitud     ViveroSolicitudAsignacion[]
+  id                         Int                            @id @default(autoincrement())
+  municipioId                Int
+  nombre                     String                         @db.VarChar(100)
+  meta                       Int
+  latitud                    Decimal                        @db.Decimal(10, 7)
+  longitud                   Decimal                        @db.Decimal(10, 7)
+  estaActivo                 Int                            @default(1) @db.TinyInt
+  direccion                  String?                        @db.VarChar(255)
+  enlace                     String?                        @db.VarChar(50)
+  telEnlace                  String?                        @db.VarChar(20)
+  responsable                String?                        @db.VarChar(50)
+  telResponsable             String?                        @db.VarChar(20)
+  googleMap                  String?                        @db.VarChar(50)
+  municipio                  Municipio                      @relation(fields: [municipioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroMunicipio")
+  asignaciones               ViveroAsignacion[]
+  disponibilidadesPorEspecie ViveroDisponibilidadEspecies[]
 
   @@index([municipioId], map: "fkViveroMunicipio_idx")
 }
 
 model ViveroDisponibilidadEspecies {
-  id            Int           @id @default(autoincrement())
-  viveroId      Int
-  especieId     Int
-  disponibles   Int
-  enProceso     Int
-  fecha         DateTime      @db.Date
-  vivero        Vivero        @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkEspecieVivero")
-  especie       ViveroEspecie @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecie")
+  id          Int           @id @default(autoincrement())
+  viveroId    Int
+  especieId   Int
+  disponibles Int
+  enProceso   Int
+  fecha       DateTime      @db.Date
+  vivero      Vivero        @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkEspecieVivero")
+  especie     ViveroEspecie @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecie")
 
   @@index([viveroId], map: "fkEspecieVivero_idx")
   @@index([especieId], map: "fkViveroEspecie_idx")
 }
 
 model ViveroEspecie {
-  id                               Int                                @id @default(autoincrement())
-  tipoId                           Int
-  estadoId                         Int
-  categoriaId                      Int
-  comun                            String                             @db.VarChar(45)
-  cientifico                       String                             @db.VarChar(100)
-  disponibilidades                 ViveroDisponibilidadEspecies[]
-  categoria                        ViveroEspecieCategoria             @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieCategoria")
-  estado                           ViveroEspecieEstado                @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieEstado")
-  tipo                             ViveroEspecieTipo                  @relation(fields: [tipoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieTipo")
-  detallesEnAsignaciones           ViveroSolicitudAsignacionDetalle[]
-  detallesEnSolicitudes            ViveroSolicitudDetalle[]
+  id                    Int                            @id @default(autoincrement())
+  tipoId                Int
+  estadoId              Int
+  categoriaId           Int
+  comun                 String                         @db.VarChar(45)
+  cientifico            String                         @db.VarChar(100)
+  asignaciones          ViveroAsignacion[]
+  disponibilidades      ViveroDisponibilidadEspecies[]
+  categoria             ViveroEspecieCategoria         @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieCategoria")
+  estado                ViveroEspecieEstado            @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieEstado")
+  tipo                  ViveroEspecieTipo              @relation(fields: [tipoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroEspecieTipo")
+  detallesEnSolicitudes ViveroSolicitudDetalle[]
 
   @@index([categoriaId], map: "fkViveroEspecieCategoria_idx")
   @@index([estadoId], map: "fkViveroEspecieEstado_idx")
@@ -85,103 +85,135 @@ model ViveroEspecie {
 }
 
 model ViveroEspecieCategoria {
-  id            Int             @id @default(autoincrement())
-  nombre        String          @db.VarChar(45)
-  especies      ViveroEspecie[]
+  id       Int             @id @default(autoincrement())
+  nombre   String          @db.VarChar(45)
+  especies ViveroEspecie[]
 }
 
 model ViveroEspecieEstado {
-  id            Int             @id @default(autoincrement())
-  nombre        String          @db.VarChar(45)
-  especies      ViveroEspecie[]
+  id       Int             @id @default(autoincrement())
+  nombre   String          @db.VarChar(45)
+  especies ViveroEspecie[]
 }
 
 model ViveroEspecieTipo {
-  id            Int             @id @default(autoincrement())
-  nombre        String          @db.VarChar(45)
-  especies      ViveroEspecie[]
+  id       Int             @id @default(autoincrement())
+  nombre   String          @db.VarChar(45)
+  especies ViveroEspecie[]
 }
 
 model ViveroSolicitud {
-  id                        Int                         @id @default(autoincrement())
-  municipioAReforestarId    Int
-  estadoId                  Int
-  nombreDelSolicitante      String                      @db.VarChar(45)
-  apellidoDelSolicitante    String                      @db.VarChar(45)
-  duiDelSolicitante         String                      @db.VarChar(20)
-  institucionSolicitante    String                      @db.VarChar(100)
-  fechaDeSolicitud          DateTime                    @db.DateTime(0)
-  lugarAReforestar          String                      @db.VarChar(100)
-  correoDelSolicitante      String                      @db.VarChar(45)
-  telefonoDelSolicitante    String?                     @db.VarChar(20)
-  celularDelSolicitante     String                      @db.VarChar(20)
-  notas                     String?                     @db.VarChar(500)
-  creado                    DateTime                    @default(now()) @db.DateTime(0)
-  actualizado               DateTime                    @default(now()) @db.DateTime(0)
-  eliminado                 DateTime?                   @db.Date
-  estaEliminado             Int                         @default(0) @db.TinyInt
-  estado                    ViveroSolicitudEstado       @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudEsdato")
-  municipio                 Municipio                   @relation(fields: [municipioAReforestarId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudMunicipio")
-  asignaciones              ViveroSolicitudAsignacion[]
-  detalles                  ViveroSolicitudDetalle[]
+  id                     Int                      @id @default(autoincrement())
+  municipioAReforestarId Int
+  estadoId               Int
+  nombreDelSolicitante   String                   @db.VarChar(45)
+  apellidoDelSolicitante String                   @db.VarChar(45)
+  duiDelSolicitante      String                   @db.VarChar(20)
+  institucionSolicitante String?                  @db.VarChar(100)
+  fechaDeSolicitud       DateTime                 @db.DateTime(0)
+  lugarAReforestar       String                   @db.VarChar(100)
+  correoDelSolicitante   String                   @db.VarChar(45)
+  telefonoDelSolicitante String?                  @db.VarChar(20)
+  celularDelSolicitante  String                   @db.VarChar(20)
+  notas                  String?                  @db.VarChar(500)
+  creado                 DateTime                 @default(now()) @db.DateTime(0)
+  actualizado            DateTime                 @default(now()) @db.DateTime(0)
+  eliminado              DateTime?                @db.Date
+  estaEliminado          Int                      @default(0) @db.TinyInt
+  asignaciones           ViveroAsignacion[]
+  estado                 ViveroSolicitudEstado    @relation(fields: [estadoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudEsdato")
+  municipio              Municipio                @relation(fields: [municipioAReforestarId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkViveroSolicitudMunicipio")
+  detalles               ViveroSolicitudDetalle[]
 
   @@index([estadoId], map: "fkViveroSolicitudEsdato_idx")
   @@index([municipioAReforestarId], map: "fkViveroSolicitudMunicipio_idx")
 }
 
-model ViveroSolicitudAsignacion {
-  id                               Int                                @id @default(autoincrement())
-  solicitudId                      Int
-  viveroId                         Int
-  asignado                         Int
-  entregado                        Int
-  creado                           DateTime                           @default(now()) @db.DateTime(0)
-  actualizado                      DateTime                           @default(now()) @db.DateTime(0)
-  eliminado                        DateTime?                          @db.DateTime(0)
-  estaEliminado                    Int                                @default(0) @db.TinyInt
-  solicitud                        ViveroSolicitud                    @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolAsigSolicitud")
-  vivero                           Vivero                             @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolAsigVivero")
-  detalles                         ViveroSolicitudAsignacionDetalle[]
-
-  @@index([solicitudId], map: "fkVivSolAsigSolicitud_idx")
-  @@index([viveroId], map: "fkVivSolAsigVivero_idx")
-}
-
-model ViveroSolicitudAsignacionDetalle {
-  id                        Int                       @id @default(autoincrement())
-  asignacionId              Int
-  especieId                 Int
-  cantidadAsignada          Int
-  cantidadEntregada         Int
-  creado                    DateTime                  @default(now()) @db.DateTime(0)
-  actualizado               DateTime                  @default(now()) @db.DateTime(0)
-  eliminado                 DateTime?                 @db.DateTime(0)
-  estaEliminado             Int                       @default(0) @db.TinyInt
-  asignacion                ViveroSolicitudAsignacion @relation(fields: [asignacionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolAsigDetAsignacion")
-  especie                   ViveroEspecie             @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolAsigEspecie")
-
-  @@index([asignacionId], map: "fkVivSolAsigDetAsignacion_idx")
-  @@index([especieId], map: "fkVivSolAsigEspecie_idx")
-}
-
 model ViveroSolicitudDetalle {
-  id              Int             @id @default(autoincrement())
-  solicitudId     Int
-  especieId       Int
-  cantidad        Int
-  creado          DateTime        @default(now()) @db.DateTime(0)
-  actualizado     DateTime        @default(now()) @db.DateTime(0)
-  eliminado       DateTime?       @db.DateTime(0)
-  estaEliminado   Int             @default(0) @db.TinyInt
-  especie   ViveroEspecie   @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolDetalleEspecie")
-  solicitud       ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolDetalleSolicitud")
+  id            Int             @id @default(autoincrement())
+  solicitudId   Int
+  especieId     Int?
+  cantidad      Int
+  creado        DateTime        @default(now()) @db.DateTime(0)
+  actualizado   DateTime        @default(now()) @db.DateTime(0)
+  eliminado     DateTime?       @db.DateTime(0)
+  estaEliminado Int             @default(0) @db.TinyInt
+  especie       ViveroEspecie?  @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolDetalleEspecie")
+  solicitud     ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivSolDetalleSolicitud")
 
   @@index([especieId], map: "fkVivSolDetalleEspecie_idx")
   @@index([solicitudId], map: "fkVivSolDetalleSolicitud_idx")
 }
 
 model ViveroSolicitudEstado {
-  id              Int               @id @default(autoincrement())
-  nombre          String            @db.VarChar(45)
-  solicitudes     ViveroSolicitud[]
+  id          Int               @id @default(autoincrement())
+  nombre      String            @db.VarChar(45)
+  solicitudes ViveroSolicitud[]
+}
+
+model Account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
+}
+
+model User {
+  id            String    @id
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  Account       Account[]
+  Session       Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model ViveroAsignacion {
+  id                Int             @id @default(autoincrement())
+  solicitudId       Int
+  viveroId          Int
+  especieId         Int
+  cantidadAsignada  Int
+  cantidadEntregada Int             @default(0)
+  actualizado       DateTime        @default(now()) @db.DateTime(0)
+  creado            DateTime        @default(now()) @db.DateTime(0)
+  eliminado         DateTime?       @db.DateTime(0)
+  estaEliminado     Int             @default(0) @db.TinyInt
+  especie           ViveroEspecie   @relation(fields: [especieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigEspecie")
+  solicitud         ViveroSolicitud @relation(fields: [solicitudId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigSolicitud")
+  vivero            Vivero          @relation(fields: [viveroId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkVivAsigVivero")
+
+  @@index([especieId], map: "fkVivSolAsigEspecie_idx")
+  @@index([solicitudId], map: "fkVivAsigSolicitud_idx")
+  @@index([viveroId], map: "fkVivAsigVivero_idx")
 }

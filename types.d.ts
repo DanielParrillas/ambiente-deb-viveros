@@ -2,11 +2,20 @@ import { ViveroDisponibilidadEspecies } from "@prisma/client";
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "./src/server/routers/_app";
 
-type RouterInput = inferRouterInputs<AppRouter>;
-type RouterOuput = inferRouterOutputs<AppRouter>;
+export interface GeneralDataSimple {
+  id: number;
+  nombre: string;
+}
 
-export type SolicitudListaInput = RouterInput["solicitud"]["lista"];
-export type SolicitudListaOuput = RouterInput["solicitud"]["lista"];
+export interface MunicipioSimple extends GeneralDataSimple {
+  departamento: GeneralDataSimple;
+}
+
+export interface EspecieSimple {
+  id: number;
+  comun: string;
+  cientifico: string;
+}
 
 interface Disponibilidad
   extends Omit<ViveroDisponibilidadEspecies, "viveroId" | "especieId"> {}

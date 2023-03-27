@@ -71,6 +71,7 @@ const getDisponibilidad = async (req: NextApiRequest, res: NextApiResponse) => {
           viveroId: parseInt(id as string),
         },
         select: { ...queryDeUnVivero.select },
+        orderBy: [{ especie: { cientifico: "asc" } }],
       }
     );
 

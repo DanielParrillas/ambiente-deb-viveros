@@ -1,131 +1,93 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import { stableSort, getComparator, Order } from "@/src/utils/tableUtils";
-import EncabezadoTabla, { HeadCell } from "@/src/components/tables/Encabezado";
 import { useEffect, useState } from "react";
 import { trpc } from "@/src/utils/trpc";
 import { useAlert } from "@/src/hooks/alertStore";
-
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-const headCells: HeadCell[] = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
-    numeric: true,
-    disablePadding: false,
-    label: "Calories",
-  },
-  {
-    id: "fat",
-    numeric: true,
-    disablePadding: false,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
-  },
-];
+import TablaSolicitudes from "@/src/components/tables/TablaSolicitudes";
+import type { Data as SolicitudData } from "@/src/components/tables/TablaSolicitudes";
+import { TextField, Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import GetAppIcon from "@mui/icons-material/GetApp";
+import AddIcon from "@mui/icons-material/Add";
+import { useRouter } from "next/router";
+import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
 export default function Solicitudes() {
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<string>("calories");
-  const { lanzarAlerta } = useAlert();
   const solicitudQuery = trpc.solicitud.lista.useQuery();
+  const [solicitudes, setSolicitudes] = useState<SolicitudData[]>([]);
+  const { lanzarAlerta } = useAlert();
+  const router = useRouter();
 
   useEffect(() => {
-    if (solicitudQuery.isError)
-      lanzarAlerta(solicitudQuery.error.message, { severity: "error" });
-  }, [solicitudQuery.isError]);
+    lanzarAlerta("Cargando solicitudes...", { severity: "info" });
+  }, [solicitudQuery.isLoading]);
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: string
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+  useEffect(() => {
+    if (solicitudQuery.isError || solicitudQuery.isRefetchError)
+      lanzarAlerta(solicitudQuery.error.message, { severity: "error" });
+  }, [solicitudQuery.isError, solicitudQuery.isRefetchError]);
+
+  useEffect(() => {
+    if (solicitudQuery.data?.lista) {
+      lanzarAlerta("Solicitudes cargadas", { severity: "success" });
+      setSolicitudes(generarFilas());
+    }
+  }, [solicitudQuery.data]);
+
+  const generarFilas = (): SolicitudData[] => {
+    if (solicitudQuery.data?.lista) {
+      return solicitudQuery.data.lista.map<SolicitudData>((solicitud) => ({
+        estado: solicitud.estado.nombre,
+        fecha: solicitud.fechaDeSolicitud,
+        id: solicitud.id,
+        institucion:
+          solicitud.institucionSolicitante === null
+            ? "Persona natural"
+            : solicitud.institucionSolicitante,
+        nombreCompleto:
+          solicitud.nombreDelSolicitante + solicitud.apellidoDelSolicitante,
+        notas: solicitud.notas ? solicitud.notas : "Sin notas",
+        cantidadSolicitadaTotal: solicitud.cantidad ? solicitud.cantidad : 0,
+      }));
+    } else {
+      return [];
+    }
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {};
-
   return (
-    <TableContainer>
-      <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-        <EncabezadoTabla
-          headCells={headCells}
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          rowCount={
-            solicitudQuery.data?.lista ? solicitudQuery.data.lista.length : 0
-          }
-        />
-        {solicitudQuery.data === undefined ? (
-          <TableBody></TableBody>
-        ) : (
-          <TableBody>
-            {stableSort(
-              solicitudQuery.data.lista,
-              getComparator(order, orderBy)
-            ).map((row: typeof solicitudQuery.data.lista[0], index) => {
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  onClick={(event) =>
-                    handleClick(event, row.nombreDelSolicitante)
-                  }
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={`row-solicitud-${row.id}`}
-                >
-                  <TableCell
-                    component="th"
-                    id={labelId}
-                    scope="row"
-                    padding="none"
-                  >
-                    {row.fechaDeSolicitud}
-                  </TableCell>
-                  <TableCell align="right">{row.estado.nombre}</TableCell>
-                  <TableCell align="right">
-                    {row.institucionSolicitante}
-                  </TableCell>
-                  <TableCell align="right">
-                    {row.apellidoDelSolicitante}
-                  </TableCell>
-                  <TableCell align="right">{row.notas}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        )}
-      </Table>
-    </TableContainer>
+    <div className="flex flex-col h-full">
+      <div className="w-full mb-4 flex gap-2 md:gap-4 justify-between">
+        <div className="flex items-end basis-full md:basis-1/2">
+          <SearchIcon />
+          <TextField
+            label="Buscar"
+            size="small"
+            variant="standard"
+            color="primary"
+            className="w-full"
+          />
+        </div>
+        <div className="flex gap-2 md:gap-4">
+          <Button
+            color="success"
+            variant="outlined"
+            startIcon={<GetAppIcon />}
+            className="p-1 md:p-2 normal-case text-xs md:text-sm"
+          >
+            Exportar
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              router.push("/solicitudes/nuevo");
+            }}
+            className="p-1 flex justify-center md:p-2 normal-case text-xs md:text-sm"
+          >
+            Agregar
+          </Button>
+        </div>
+      </div>
+      <TablaSolicitudes rows={solicitudes} />
+    </div>
   );
 }

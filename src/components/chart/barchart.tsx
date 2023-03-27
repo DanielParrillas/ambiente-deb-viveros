@@ -73,6 +73,7 @@ const CustomizedRectangle = (props: any) => {
 
     return (
       <Rectangle
+        key={`rectangulo-barchart-${index}`}
         width={10}
         height={-yDiff}
         x={firstSeriesPoint.x - 5}
