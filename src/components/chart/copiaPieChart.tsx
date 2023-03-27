@@ -44,6 +44,7 @@ const renderActiveShape = (props: any) => {
         fontSize={(cx + cy) * 0.035}
       >
         {payload.name}
+        {`Arboles entregados: ${value}`}
       </text>
       #sector del pie chart interno
       <Sector
@@ -65,29 +66,6 @@ const renderActiveShape = (props: any) => {
         outerRadius={outerRadius + (cx + cy) * 0.02}
         fill={fill}
       />
-      <path
-        d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-        stroke={fill}
-        fill="none"
-      />
-      #circulo del indicador de la etiqueta
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text
-        x={ex + (cos >= 0.5 ? -1 : 1) * cx * 0.08 - 15}
-        y={ey + 12}
-        textAnchor={textAnchor}
-        fill="#333"
-        fontSize={(cx + cy) * 0.03}
-      >{`Arboles entregados: ${value}`}</text>
-      <text
-        x={ex + (cos >= 0.5 ? -1 : 1) * 22 - 10}
-        y={ey + 10}
-        dy={3 + (cx + cy) * 0.03}
-        textAnchor={textAnchor}
-        fill="#0D2601"
-        fontSize={(cx + cy) * 0.03}
-        fontWeight={"bold"}
-      >{`Avance de meta ${(percent * 100).toFixed(2)}%`}</text>
     </g>
   );
 };
@@ -105,7 +83,7 @@ export default function App() {
     <ResponsiveContainer
       width="100%"
       height={"100%"}
-      aspect={1}
+      aspect={1.5}
       maxHeight={400}
     >
       <PieChart barSize={"100%"} layout="radial">

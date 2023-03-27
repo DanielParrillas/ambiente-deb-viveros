@@ -22,7 +22,10 @@ const getEspecies = async (
   query: typeof defaultQuery | typeof simpleQuery
 ) => {
   try {
-    const especies = await prisma.viveroEspecie.findMany(query);
+    const especies = await prisma.viveroEspecie.findMany({
+      orderBy: [{ cientifico: "asc" }, { comun: "asc" }],
+      select: { ...query.select },
+    });
     res.json(especies);
   } catch (error) {
     console.log(error);
