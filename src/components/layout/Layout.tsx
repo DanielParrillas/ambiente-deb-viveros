@@ -11,7 +11,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const sideBar = useSideBarStore();
+  const { estaVisible: sideBarVisible } = useSideBarStore();
   const cerrarSideBar = useSideBarStore((state) => state.cerrarSideBar);
   const [open, setOpen] = useState(false);
   const {
@@ -24,18 +24,20 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar />
-      {sideBar.estaVisible === true && <SideBar />}
-
       <main
-        className="text-slate-600 pt-16 w-full h-screen overflow-hidden absolute top-0 z-0 bg-marn-dark p-4"
+        className="text-slate-600 pt-16 w-full h-screen flex flex-col md:flex-row gap-4 overflow-hidden absolute top-0 z-0 bg-marn-dark p-4"
         onClick={() => {
-          if (sideBar.estaVisible === true) {
+          if (sideBarVisible === true) {
             cerrarSideBar();
           }
           setOpen(true);
         }}
       >
-        <div className="w-full h-full overflow-y-auto p-4 bg-gray-200 rounded-md">
+        <SideBar />
+        <div
+          className="w-full h-full overflow-y-auto p-4 bg-gray-200 rounded-md
+          }"
+        >
           {children}
         </div>
       </main>

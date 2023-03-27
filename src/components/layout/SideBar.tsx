@@ -13,58 +13,75 @@ import SummarizeIcon from "@mui/icons-material/Summarize";
 import Link from "next/link";
 import { useSideBarStore } from "@/src/hooks/sideBarStore";
 import { useRouter } from "next/router";
+import { useToolStore } from "@/src/hooks/toolStore";
+import type { ToolId } from "@/src/hooks/toolStore";
 
-function createSideBarItem(name: string, url: string, icon: JSX.Element) {
-  return { name, url, icon };
-}
-const sideBarItems = [
-  createSideBarItem("Home", "/", <HomeIcon className="text-slate-200" />),
-  createSideBarItem(
-    "Dashboard",
-    "/dashboard",
-    <BarChartIcon className="text-slate-200" />
-  ),
-  createSideBarItem(
-    "Disponibilidades",
-    "/disponibilidades",
-    <WarehouseIcon className="text-slate-200" />
-  ),
-  createSideBarItem(
-    "Solicitudes",
-    "/solicitudes",
-    <SummarizeIcon className="text-slate-200" />
-  ),
-];
+const sideBarIcons: Partial<Record<ToolId, JSX.Element>> = {
+  dashboard: <BarChartIcon className="text-slate-200" />,
+  disponibilidades: <WarehouseIcon className="text-slate-200" />,
+  mantenimientos: <SummarizeIcon className="text-slate-200" />,
+  solicitudes: <SummarizeIcon className="text-slate-200" />,
+};
 
 export default function SideBar() {
-  const sideBar = useSideBarStore();
+  const { cambiarVisivilidad, estaVisible } = useSideBarStore();
   const router = useRouter();
+  const { tools } = useToolStore();
   // console.log(router.pathname);
   return (
-    <div className=" h-full absolute left-0 top-0 pt-16 w-full sm:w-72  text-slate-700 z-20">
-      <List className="bg-marn-dark shadow-2xl shadow-black h-full w-full py-6">
-        {sideBarItems.map((item, i) => (
-          <Link key={`listLink-${i}`} href={item.url}>
-            <ListItem
-              key={`listItem-${i}`}
-              disablePadding
-              className={`text-slate-300 ${
-                router.pathname === item.url ? "bg-marn-dark" : ""
-              }`}
-            >
-              <ListItemButton
-                key={`listItemButton-${i}`}
-                onClick={() => sideBar.cambiarVisivilidad()}
-              >
-                <ListItemIcon key={`listItemIcon-${i}`}>
-                  {item.icon}
-                </ListItemIcon>
+    <div
+      className={`transition ease-in-out duration-300 s text-slate-700 ${
+        estaVisible ? "" : "hidden"
+      }`}
+    >
+      <List className="bg-marn-dark">
+        <Link href={"/"}>
+          <ListItem
+            disablePadding
+            className={`text-slate-300 ${
+              router.pathname === "/" ? "bg-marn-dark" : ""
+            }`}
+          >
+            <ListItemButton onClick={() => cambiarVisivilidad()}>
+              <ListItemIcon>
+                <HomeIcon className="text-slate-200" />
+              </ListItemIcon>
 
-                <ListItemText key={`listItemText-${i}`} primary={item.name} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
+              <ListItemText primary="Home" />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        {tools.map(
+          (tool, i) =>
+            !tool.enConstruccion && (
+              <Link
+                key={`listLink-${i}`}
+                href={tool.enConstruccion ? "/" : `/${tool.id}`}
+              >
+                <ListItem
+                  key={`listItem-${i}`}
+                  disablePadding
+                  className={`text-slate-300 ${
+                    router.pathname === tool.id ? "bg-marn-dark" : ""
+                  }`}
+                >
+                  <ListItemButton
+                    key={`listItemButton-${i}`}
+                    onClick={() => cambiarVisivilidad()}
+                  >
+                    <ListItemIcon key={`listItemIcon-${i}`}>
+                      {sideBarIcons[tool.id]}
+                    </ListItemIcon>
+
+                    <ListItemText
+                      key={`listItemText-${i}`}
+                      primary={tool.titulo}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            )
+        )}
       </List>
     </div>
   );
