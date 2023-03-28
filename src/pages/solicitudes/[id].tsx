@@ -27,6 +27,7 @@ export default function SolicitudDetalle() {
     if (solicitudFromQuery) {
       lanzarAlerta("Solicitud cargada", { severity: "success" });
       setSolicitud({ ...solicitud, ...solicitudFromQuery });
+      console.log(solicitudFromQuery);
     }
   }, [solicitudQuery.data]);
 
@@ -41,11 +42,7 @@ export default function SolicitudDetalle() {
         <h3>{`${solicitud.nombreDelSolicitante} ${solicitud.apellidoDelSolicitante}`}</h3>
         <Chip
           size="small"
-          label={
-            solicitud.institucionSolicitante
-              ? solicitud.institucionSolicitante
-              : "Persona natural"
-          }
+          label={solicitud.estado != "" ? solicitud.estado.nombre : "..."}
           className="text-xs"
           color={solicitud.institucionSolicitante ? "default" : "primary"}
         />

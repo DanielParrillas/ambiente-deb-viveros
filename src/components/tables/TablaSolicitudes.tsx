@@ -140,7 +140,9 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
           })}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4}>cargando...</TableCell>
+              <TableCell colSpan={4} className="animate-pulse">
+                cargando...
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

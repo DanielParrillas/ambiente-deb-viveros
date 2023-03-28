@@ -17,6 +17,11 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+*::selection {
+  background-color: #6b7187;
+  color: #e5e7eb;
+}
+
 img,
 picture,
 video,
