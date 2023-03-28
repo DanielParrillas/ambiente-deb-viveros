@@ -19,7 +19,7 @@ export default function Home() {
         <Link
           href={tool.enConstruccion ? "/" : tool.id}
           key={tool.id}
-          className={`transition ease-in-out duration-300 select-none bg-white flex flex-col gap-2 justify-center items-center p-5 rounded-xl text-center ${
+          className={`shadow-md transition ease-in-out duration-300 select-none bg-white flex flex-col gap-2 justify-center items-center p-5 rounded-xl text-center ${
             tool.enConstruccion
               ? "cursor-default text-slate-300 opacity-70"
               : "cursor-pointer hover:shadow-lg text-slate-500 hover:text-slate-600"

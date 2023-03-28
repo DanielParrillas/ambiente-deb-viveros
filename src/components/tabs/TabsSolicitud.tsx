@@ -3,7 +3,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { DatosSolicitud } from "./TabSolicitud";
 import SolicitudForm from "../form/SolicitudForm";
-import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,16 +53,12 @@ export default function TabsSolicitud() {
         className="bg-transparents"
       >
         <Tab label="Datos" {...a11yProps(0)} />
-        <Tab label="Detalle" {...a11yProps(1)} />
-        <Tab label="Asignaciones" {...a11yProps(2)} />
+        <Tab label="Asignaciones" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <DatosSolicitud />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div>asd</div>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
         <SolicitudForm />
       </TabPanel>
     </>

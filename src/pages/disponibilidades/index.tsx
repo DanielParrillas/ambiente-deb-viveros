@@ -13,18 +13,23 @@ export default function Disponibilidades() {
   ];
 
   return (
-    <div className="h-full flex flex-col md:flex-row md:p-16 gap-8 md:gap-16 p-4">
-      {links.map((link, i) => (
-        <Link
-          key={`link-dips-${i}`}
-          href={link.ulr}
-          className="transition ease-in-out duration-200 shadow-md grid content-center p-4 md:basis-1/2 rounded-md bg-white hover:shadow-lg"
-        >
-          <div key={`div-disp-${i}`} className="w-full h-full">
-            <p className="text-center text-2xl">{link.label}</p>
-          </div>
-        </Link>
-      ))}
+    <div className="h-full grid md:grid-cols-2 p-16 gap-16">
+      <Link
+        href="disponibilidades/viveros"
+        className="shadow-sm transition ease-in-out duration-200 grid content-center p-4 md:basis-1/2 rounded-xl bg-white hover:shadow-lg"
+      >
+        <div className="w-full h-full">
+          <h2 className="text-center text-gray-700">Por viveros</h2>
+        </div>
+      </Link>
+      <Link
+        href="disponibilidades"
+        className="transition shadow-sm ease-in-out duration-200 grid content-center p-4 md:basis-1/2 rounded-xl bg-white opacity-50 cursor-default"
+      >
+        <div className="w-full h-full">
+          <h2 className="text-center text-gray-700">Por especies</h2>
+        </div>
+      </Link>
     </div>
   );
 }
