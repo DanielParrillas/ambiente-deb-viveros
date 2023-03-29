@@ -16,6 +16,8 @@ interface Asignacion {
   id: number;
   vivero: GeneralDataSimple;
   especie: EspecieSimple;
+  cantidadAsignada: number;
+  cantidadEntregada: number;
 }
 
 interface Solicitud {

@@ -46,6 +46,8 @@ const completeSolicitudSelect =
         id: true,
         vivero: { select: { id: true, nombre: true } },
         especie: { select: { id: true, comun: true, cientifico: true } },
+        cantidadAsignada: true,
+        cantidadEntregada: true,
       },
     },
   });
