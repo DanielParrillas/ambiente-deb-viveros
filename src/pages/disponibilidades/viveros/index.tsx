@@ -117,13 +117,13 @@ export default function TablaViveros() {
         >
           <TableHead>
             <TableRow>
-              <TableCell className="bg-marn-light text-white">Nombre</TableCell>
-              <TableCell className="bg-marn-light text-white">
+              <TableCell className="bg-teal-600 text-white">Nombre</TableCell>
+              <TableCell className="bg-teal-600 text-white">
                 En Proceso
               </TableCell>
               <TableCell
                 align="right"
-                className="bg-marn-light text-white rounded-tr-md"
+                className="bg-teal-600 text-white rounded-tr-md"
               >
                 Disponibles
               </TableCell>

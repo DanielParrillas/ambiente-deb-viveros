@@ -164,15 +164,13 @@ export default function VistaVivero() {
         >
           <TableHead className="mt-16">
             <TableRow>
-              <TableCell className="bg-marn-light text-white">Común</TableCell>
-              <TableCell className="bg-marn-light text-white">
-                Especie
-              </TableCell>
-              <TableCell className="bg-marn-light text-white">Fecha</TableCell>
-              <TableCell align="right" className="bg-marn-light text-white">
+              <TableCell className="bg-teal-600 text-white">Común</TableCell>
+              <TableCell className="bg-teal-600 text-white">Especie</TableCell>
+              <TableCell className="bg-teal-600 text-white">Fecha</TableCell>
+              <TableCell align="right" className="bg-teal-600 text-white">
                 En proceso
               </TableCell>
-              <TableCell align="right" className="bg-marn-light text-white">
+              <TableCell align="right" className="bg-teal-600 text-white">
                 Disponibles
               </TableCell>
             </TableRow>

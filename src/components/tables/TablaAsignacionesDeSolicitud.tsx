@@ -6,9 +6,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
-export default function TablaSolicituDetalle() {
+export default function TablaAsignacionesDeSolicitud() {
   const { solicitud } = useSolicitudStore();
-
   return (
     <TableContainer className="rounded-md">
       <Table>
@@ -16,28 +15,30 @@ export default function TablaSolicituDetalle() {
           <TableRow>
             <TableCell className="bg-teal-600 text-white">Común</TableCell>
             <TableCell className="bg-teal-600 text-white">Científico</TableCell>
+            <TableCell className="bg-teal-600 text-white">Vivero</TableCell>
             <TableCell align="right" className="bg-teal-600 text-white">
               Cantidad
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {solicitud.detalles.map((detalle) => (
+          {solicitud.asignaciones.map((asignacion) => (
             <TableRow
-              key={`detalle-especie-${detalle.id}`}
+              key={`detalle-especie-${asignacion.id}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {detalle.especie?.cientifico}
+                {asignacion.especie?.cientifico}
               </TableCell>
-              <TableCell>{detalle.especie?.comun}</TableCell>
-              <TableCell align="right">{detalle.cantidad}</TableCell>
+              <TableCell>{asignacion.especie?.comun}</TableCell>
+              <TableCell>{asignacion.vivero.nombre}</TableCell>
+              <TableCell align="right">{asignacion.id}</TableCell>
             </TableRow>
           ))}
-          {solicitud.detalles.length === 0 && (
+          {solicitud.asignaciones.length === 0 && (
             <TableRow>
               <TableCell colSpan={3}>
-                <p className="text-gray-500">sin detalle</p>
+                <p className="text-gray-500">sin asignaciones</p>
               </TableCell>
             </TableRow>
           )}

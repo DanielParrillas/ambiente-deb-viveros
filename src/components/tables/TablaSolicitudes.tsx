@@ -174,7 +174,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           <TableCell
             key={headCell.id}
             sortDirection={orderBy === headCell.id ? order : false}
-            className="bg-marn-light text-white cursor-pointer"
+            className="bg-teal-600 text-white cursor-pointer"
             onClick={createSortHandler(headCell.id)}
           >
             <TableSortLabel

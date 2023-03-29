@@ -2,7 +2,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { DatosSolicitud } from "./TabSolicitud";
-import SolicitudForm from "../form/SolicitudForm";
+import DatosAsignacion from "./TabAsignacion";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ function a11yProps(index: number) {
   return {
     id: `solicitud-tab-${index}`,
     "aria-controls": `solicitud-tabpanel-${index}`,
-    className: "normal-case text-sm rounded-t-xl text-white bg-marn-darklight",
+    className: "normal-case text-sm rounded-t-xl text-white bg-teal-600",
   };
 }
 
@@ -59,7 +59,7 @@ export default function TabsSolicitud() {
         <DatosSolicitud />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SolicitudForm />
+        <DatosAsignacion />
       </TabPanel>
     </>
   );
