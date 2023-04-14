@@ -14,6 +14,8 @@ import type { Order } from "@/src/utils/tableUtils";
 import { useRouter } from "next/router";
 import { useSolicitudStore } from "@/src/hooks/solicitudStore";
 
+import TextField from "@mui/material/TextField";
+
 export interface Data {
   comun: string;
   cientifico: string;
@@ -51,11 +53,9 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-interface TablaSolicitudesProps {
-  rows: Data[];
-}
+interface TablaSolicitudesProps {}
 
-export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
+export default function TablaSolicitudesSheet() {
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("cientifico");
   const [selected, setSelected] = React.useState<number | false>(false);
@@ -121,13 +121,41 @@ export default function TablaSolicitudes({ rows }: TablaSolicitudesProps) {
                     : "transition ease-in duration-75 cursor-pointer hover:bg-gray-50"
                 }
               >
-                <TableCell component="th" scope="row">
-                  {row.cientifico}
-                </TableCell>
-                <TableCell>{row.comun}</TableCell>
-                <TableCell>{row.vivero}</TableCell>
-                <TableCell align="right">{row.cantidadAsignada}</TableCell>
-                <TableCell align="right">{row.cantidadEntregada}</TableCell>
+                {row.id !== selected ? (
+                  <>
+                    <TableCell component="th" scope="row">
+                      {row.cientifico}
+                    </TableCell>
+                    <TableCell>{row.comun}</TableCell>
+                    <TableCell>{row.vivero}</TableCell>
+                    <TableCell align="right" className="p-0">
+                      {row.cantidadAsignada}
+                    </TableCell>
+                    <TableCell align="right" className="p-0">
+                      {row.cantidadEntregada}
+                    </TableCell>
+                  </>
+                ) : (
+                  <>
+                    <TableCell colSpan={3}></TableCell>
+                    <TableCell className="p-0 absolute">
+                      <input
+                        key={`${row.id}-field`}
+                        value={row.cantidadAsignada}
+                        type="number"
+                        className="w-full h-full p-0 border-none bg-transparent text-right"
+                      />
+                    </TableCell>
+                    <TableCell className="">
+                      <input
+                        key={`${row.id}-field`}
+                        value={row.cantidadEntregada}
+                        type="number"
+                        className=" p-0 border-none bg-transparent text-right"
+                      />
+                    </TableCell>
+                  </>
+                )}
               </TableRow>
             );
           })}
